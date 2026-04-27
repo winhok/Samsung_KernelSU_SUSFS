@@ -94,25 +94,36 @@ jobs:
 
       - name: Export ccache + determinism
         run: |
-          echo "CCACHE_DIR=${{ github.workspace }}/.ccache" >> $GITHUB_ENV
-          echo "CCACHE_MAXSIZE=12G" >> $GITHUB_ENV
-          echo "CCACHE_COMPILERCHECK=content" >> $GITHUB_ENV
-          echo "CCACHE_NOHASHDIR=true" >> $GITHUB_ENV
-          echo "CCACHE_IGNOREOPTIONS=-sysroot*" >> $GITHUB_ENV
-          echo "CCACHE_COMPRESS=true" >> $GITHUB_ENV
-          echo "CCACHE_COMPRESSLEVEL=9" >> $GITHUB_ENV
-          echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-          echo "CCACHE_DIRECT=true" >> $GITHUB_ENV
-          echo "CCACHE_FILE_CLONE=true" >> $GITHUB_ENV
-          echo "CCACHE_INODE_CACHE=true" >> $GITHUB_ENV
-          echo "CCACHE_UMASK=002" >> $GITHUB_ENV
-          echo "CCACHE_SLOPPINESS=file_macro,time_macros,include_file_mtime,include_file_ctime,pch_defines,system_headers,locale" >> $GITHUB_ENV
+          CACHE_DIR="${{ github.workspace }}/.ccache"
+          mkdir -p "$CACHE_DIR"
+          
+          SETTINGS=(
+          "CCACHE_DIR=$CACHE_DIR"
+          "CCACHE_MAXSIZE=12G"
+          "CCACHE_COMPILERCHECK=content"
+          "CCACHE_BASEDIR=${GITHUB_WORKSPACE}"
+          "CCACHE_NOHASHDIR=true"
+          "CCACHE_IGNOREOPTIONS=-sysroot*"
+          "CCACHE_COMPRESS=true"
+          "CCACHE_COMPRESSLEVEL=9"
+          "CCACHE_BASEDIR=${GITHUB_WORKSPACE}"
+          "CCACHE_DIRECT=true"
+          "CCACHE_FILE_CLONE=true"
+          "CCACHE_INODE_CACHE=true"
+          "CCACHE_UMASK=002"
+          "CCACHE_SLOPPINESS=file_macro,time_macros,include_file_mtime,include_file_ctime,pch_defines,system_headers,locale"
+          )
+
+          for setting in "${SETTINGS[@]}"; do
+           export "$setting"
+           echo "$setting" >> $GITHUB_ENV
+          done
 
       - name: Ensure ccache is used
         run: |
-          echo 'export PATH="/usr/lib/ccache:$PATH"' >> $GITHUB_ENV
-          echo 'export CC="ccache clang"' >> $GITHUB_ENV
-          echo 'export CXX="ccache clang++"' >> $GITHUB_ENV
+          echo "/usr/lib/ccache" >> $GITHUB_PATH
+          echo "CC='ccache clang'" >> $GITHUB_ENV
+          echo "CXX='ccache clang++'" >> $GITHUB_ENV
         
       - name: Set CONFIG Environment Variable
         run: |
