@@ -19,37 +19,14 @@ runs:
      cd "$CONFIG"
      echo "Building the kernel..."
      if [[ ${{ inputs.branch }} == SM-S928B* || "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" || "${{ inputs.branch }}" == "SM-F741B-Oneui8" || "${{ inputs.branch }}" == "SM-X710-Oneui6.1.1" ]]; then
-       if [[ ${{ inputs.ccache }} == 'true' ]]; then
-        sed -i -E \
-        -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
-        -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
-        -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
-        -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
-        kernel_platform/build/kernel/_setup_env.sh
-       fi
        chmod +x build_kernel_GKI.sh
        ./build_kernel_GKI.sh || true
      elif [[ "${{ inputs.branch }}" == "SM-X916B" || "${{ inputs.branch }}" == "SM-F946N-Oneui7" || "${{ inputs.branch }}" == "SM-S916B-Oneui8" || "${{ inputs.branch }}" == "SM-S918B-Oneui8" || "${{ inputs.branch }}" == "SM-F946B-Oneui8" || "${{ inputs.branch }}" == "SM-S901E-Oneui8" || "${{ inputs.branch }}" == "SM-X800-Oneui8" || ${{ inputs.branch }} == SM-S911B* || "${{ inputs.branch }}" == "SM-M556B-Oneui8" ]]; then
-       if [[ ${{ inputs.ccache }} == 'true' ]]; then
-        sed -i -E \
-        -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
-        -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
-        -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
-        -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
-        kernel_platform/build/kernel/_setup_env.sh
-       fi
        chmod +x build_kernel_GKI.sh
        ./build_kernel_GKI.sh || true
      elif [[ ${{ inputs.branch }} == SM-A546* || "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" || "${{ inputs.branch }}" == "SM-S908B-Oneui8-bitK" || ${{ inputs.branch }} == SM-A055* || "${{ inputs.branch }}" == "SM-X610-Oneui6.1.1-bit7" || "${{ inputs.branch }}" == "SM-A166B-Oneui7" ]]; then
        #sudo apt update
        #sudo apt-get install -y libyaml-dev
-       if [[ ${{ inputs.ccache }} == 'true' ]]; then
-        sed -i -E \
-        -e 's/^[[:space:]]*CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
-        -e 's/^[[:space:]]*CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
-        -e 's/^[[:space:]]*HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
-        -e 's/^[[:space:]]*HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
-        Makefile
        fi
        chmod +x build_kernel.sh
        ./build_kernel.sh || true
@@ -59,34 +36,10 @@ runs:
        touch ./kernel-6.6/abi_symbollist
        ./build_script.sh || true
      elif [[ ${{ inputs.branch }} == SM-S926B* ]]; then
-       if [[ ${{ inputs.ccache }} == 'true' ]]; then
-        sed -i -E \
-        -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
-        -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
-        -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
-        -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
-        build/kernel/_setup_env.sh
-       fi
        tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e9945:s5e9945_user_dist
      elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
-       if [[ ${{ inputs.ccache }} == 'true' ]]; then
-        sed -i -E \
-        -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
-        -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
-        -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
-        -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
-        build/kernel/_setup_env.sh
-       fi
        tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user_dist
      elif [[ ${{ inputs.branch }} == SM-A055* || "${{ inputs.branch }}" == "SM-A075M-Oneui7" ]]; then
-       if [[ ${{ inputs.ccache }} == 'true' ]]; then
-        sed -i -E \
-        -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
-        -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
-        -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
-        -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
-        kernel/build/kernel/_setup_env.sh
-       fi
        chmod +x build_kernel.sh
        ./build_kernel.sh
      fi
