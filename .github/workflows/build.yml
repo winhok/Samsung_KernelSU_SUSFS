@@ -42,7 +42,7 @@ on:
       bbr:
         required: true
         type: string
-      ccache:
+      cache:
         required: true
         type: string
 
@@ -88,14 +88,14 @@ jobs:
           echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
 
       - name: set up bazel cache dir
-        if: inputs.build_type == 'Bazel'
+        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
         run: |
           BCACHE_DIR="${{ github.workspace }}/.cache/bazel-disk-kernel"
           mkdir -p "$BCACHE_DIR"
           echo "BCACHE_DIR=$BCACHE_DIR" >> $GITHUB_ENV
 
       - name: set up bazel cache
-        if: inputs.build_type == 'Bazel'
+        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
         uses: actions/cache@v4
         with:
          path: ${{ env.BCACHE_DIR }}
@@ -105,11 +105,11 @@ jobs:
             bcache-${{ runner.os }}-${{ inputs.build_type }}-
 
       - name: Install ccache
-        if: inputs.build_type == 'make'
+        if: inputs.build_type == 'make' && inputs.cache == 'true'
         run: sudo apt-get update && sudo apt-get install -y ccache
         
       - name: Export ccache + determinism
-        if: inputs.build_type == 'make'
+        if: inputs.build_type == 'make' && inputs.cache == 'true'
         run: |
           CACHE_DIR="${{ github.workspace }}/.ccache"
           mkdir -p "$CACHE_DIR"
@@ -137,7 +137,7 @@ jobs:
           done
 
       - name: restore ccache
-        if: inputs.build_type == 'make'
+        if: inputs.build_type == 'make' && inputs.cache == 'true'
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -147,7 +147,7 @@ jobs:
             ccache-${{ runner.os }}-${{ inputs.build_type }}-
             
       - name: Ensure ccache is used
-        if: inputs.build_type == 'make'
+        if: inputs.build_type == 'make' && inputs.cache == 'true'
         run: |
           echo "/usr/lib/ccache" >> $GITHUB_PATH
           echo "CC='ccache clang'" >> $GITHUB_ENV
@@ -279,11 +279,14 @@ jobs:
         uses: ./.github/actions/build
         with:
          branch: ${{ inputs.branch }}
-         ccache: ${{ inputs.ccache }}
 
       - name: ccache stats
-        if: always()
+        if: inputs.cache == 'true' && inputs.build_type == 'make'
         run: ccache -s -v || ccache -s
+
+      - name: bazel cache stats
+        if: inputs.cache == 'true' && inputs.build_type == 'Bazel'
+        run: bazel analyze-profile profile.json
           
       - name: Prepare AnyKernel3
         uses: ./.github/actions/ak3zip-prep
