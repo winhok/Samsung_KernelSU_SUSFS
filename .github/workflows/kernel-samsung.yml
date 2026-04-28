@@ -31,7 +31,7 @@ on:
       bbr:
         required: true
         type: string
-      ccache:
+      cache:
         required: true
         type: string
 
@@ -203,5 +203,5 @@ jobs:
       droidspace: ${{ inputs.droidspace }}
       ntsync: ${{ inputs.ntsync }}
       bbr: ${{ inputs.bbr }}
-      ccache: ${{ inputs.ccache }}
+      cache: ${{ inputs.cache }}
 
