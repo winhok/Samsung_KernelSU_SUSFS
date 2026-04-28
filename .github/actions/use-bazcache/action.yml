@@ -14,11 +14,13 @@ runs:
       cat >> .bazelrc << 'EOF'
       build --disk_cache=${{ env.BCACHE_DIR }}
       build --experimental_disk_cache_gc_max_size=1G
+      build --profile=profile.json
       EOF
       else
       touch .bazelrc
       cat >> .bazelrc << 'EOF'
       build --disk_cache=${{ env.BCACHE_DIR }}
       build --experimental_disk_cache_gc_max_size=1G
+      build --profile=profile.json
       EOF
       fi
