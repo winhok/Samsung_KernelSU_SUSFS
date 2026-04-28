@@ -27,7 +27,6 @@ runs:
      elif [[ ${{ inputs.branch }} == SM-A546* || "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" || "${{ inputs.branch }}" == "SM-S908B-Oneui8-bitK" || ${{ inputs.branch }} == SM-A055* || "${{ inputs.branch }}" == "SM-X610-Oneui6.1.1-bit7" || "${{ inputs.branch }}" == "SM-A166B-Oneui7" ]]; then
        #sudo apt update
        #sudo apt-get install -y libyaml-dev
-       fi
        chmod +x build_kernel.sh
        ./build_kernel.sh || true
      elif [[ "${{ inputs.branch }}" == "SM-A566B" ]]; then
