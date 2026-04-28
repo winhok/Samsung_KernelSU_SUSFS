@@ -31,6 +31,9 @@ on:
       bbr:
         required: true
         type: string
+      ccache:
+        required: true
+        type: string
 
 jobs:
   build-kernels-a12:
@@ -163,4 +166,5 @@ jobs:
       droidspace: ${{ inputs.droidspace }}
       ntsync: ${{ inputs.ntsync }}
       bbr: ${{ inputs.bbr }}
+      ccache: ${{ inputs.ccache }}
 
