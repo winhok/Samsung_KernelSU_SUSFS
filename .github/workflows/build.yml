@@ -265,6 +265,26 @@ jobs:
          android_version: ${{ inputs.android_version }}
          kernel_version: ${{ inputs.kernel_version }}
 
+      - name: ensure bazel cache is used
+        if: inputs.build_type == 'Bazel'
+        run: |
+          cd "$CONFIG"
+          if [ -d kernel_platform ]]; then
+          cd kernel_platform
+          touch .bazelrc
+          cat >> .bazelrc << 'EOF'
+          build --disk_cache=${{ env.BCACHE_DIR }}
+          build --experimental_disk_cache_gc_max_size=1G
+          EOF
+          else
+          touch .bazelrc
+          cat >> .bazelrc << 'EOF'
+          build --disk_cache=${{ env.BCACHE_DIR }}
+          build --experimental_disk_cache_gc_max_size=1G
+          EOF
+          fi
+           
+
       - name: Build
         uses: ./.github/actions/build
         with:
