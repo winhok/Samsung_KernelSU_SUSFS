@@ -8,7 +8,7 @@ runs:
     shell: bash
     run: |
       cd "$CONFIG"
-      if [ -d kernel_platform ]]; then
+      if [[ -d kernel_platform ]]; then
       cd kernel_platform
       touch .bazelrc
       cat >> .bazelrc << 'EOF'
