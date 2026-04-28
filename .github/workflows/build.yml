@@ -137,6 +137,7 @@ jobs:
           done
 
       - name: restore ccache
+        if: inputs.build_type == 'make'
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -146,6 +147,7 @@ jobs:
             ccache-${{ runner.os }}-${{ inputs.build_type }}-
             
       - name: Ensure ccache is used
+        if: inputs.build_type == 'make'
         run: |
           echo "/usr/lib/ccache" >> $GITHUB_PATH
           echo "CC='ccache clang'" >> $GITHUB_ENV
