@@ -1,0 +1,24 @@
+name: change clang variables to ccache clang
+description: change clang cariable to ccache clang
+
+runs:
+ using: composite
+ steps:
+  - name: change variables
+    shell: bash
+    run: |
+      cd "$CONFIG"
+      if [ -d kernel_platform ]]; then
+      cd kernel_platform
+      touch .bazelrc
+      cat >> .bazelrc << 'EOF'
+      build --disk_cache=${{ env.BCACHE_DIR }}
+      build --experimental_disk_cache_gc_max_size=1G
+      EOF
+      else
+      touch .bazelrc
+      cat >> .bazelrc << 'EOF'
+      build --disk_cache=${{ env.BCACHE_DIR }}
+      build --experimental_disk_cache_gc_max_size=1G
+      EOF
+      fi
