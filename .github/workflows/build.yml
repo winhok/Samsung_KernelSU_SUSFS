@@ -39,6 +39,9 @@ on:
       bbr:
         required: true
         type: string
+      ccache:
+        required: true
+        type: string
 
 jobs:
   build-samsung-gki:
@@ -243,6 +246,7 @@ jobs:
         uses: ./.github/actions/build
         with:
          branch: ${{ inputs.branch }}
+         ccache: ${{ inputs.ccache }}
           
       - name: Prepare AnyKernel3
         uses: ./.github/actions/ak3zip-prep
