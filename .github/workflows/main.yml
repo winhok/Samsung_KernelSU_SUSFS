@@ -65,6 +65,12 @@ on:
         type: boolean
         default: true
 
+      ccache:
+        description: "use ccache?"
+        required: false
+        default: true
+        type: boolean
+
 jobs:
 
   build-samsung:
@@ -79,6 +85,7 @@ jobs:
       droidspace: ${{ inputs.droidspace }}
       ntsync: ${{ inputs.ntsync }}
       bbr: ${{ inputs.bbr }}
+      ccache: ${{ inputs.ccache }}
 
   release:
     runs-on: ubuntu-latest
