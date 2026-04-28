@@ -87,14 +87,6 @@ jobs:
           BASE_BRANCH=$(echo "$FULL_BRANCH" | sed -E 's/(-bit[0-9]+.*$)|(-bit.*$)//i')
           echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
 
-      - name: Setup ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          max-size: "10G"
-          key: ccache-${{ runner.os }}-${{ env.BASE_BRANCH }}
-          restore-keys: |
-            ccache-${{ runner.os }}-${{ env.BASE_BRANCH }}
-
       - name: Export ccache + determinism
         run: |
           CACHE_DIR="${{ github.workspace }}/.ccache"
@@ -122,6 +114,15 @@ jobs:
            echo "$setting" >> $GITHUB_ENV
           done
 
+      - name: restore ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ runner.os }}-${{ env.BASE_BRANCH }}
+          restore-keys: |
+            ccache-${{ runner.os }}-${{ env.BASE_BRANCH }}
+            ccache-${{ runner.os }}-
+            
       - name: Ensure ccache is used
         run: |
           echo "/usr/lib/ccache" >> $GITHUB_PATH
