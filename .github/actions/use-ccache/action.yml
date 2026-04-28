@@ -29,7 +29,7 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         build/kernel/build.sh
-      elif [[-f build/kernel/_setup_env.sh ]]; then
+      elif [[ -f build/kernel/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
         -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
@@ -43,27 +43,41 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         kernel/build/kernel/build.sh
-      elif [[-f kernel/build/kernel/_setup_env.sh ]]; then
+      elif [[ -f kernel/build/kernel/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
         -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         kernel/build/kernel/_setup_env.sh
-      elif [[-f build/kernel/build.sh ]]; then
+      elif [[ -f build/kernel/build.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
         -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
-        kernel/build/kernel/build.sh
-      elif [[-f build/kernel/_setup_env.sh ]]; then
+        build/kernel/build.sh
+      elif [[ -f build/kernel/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
         -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
-        kernel/build/kernel/_setup_env.sh
+        build/kernel/_setup_env.sh
+      elif [[ -f kernel/build/build.sh ]]; then
+       sed -i -E \
+        -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
+        -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
+        -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
+        -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
+        kernel/build/build.sh
+      elif [[ -f kernel/build/_setup_env.sh ]]; then
+       sed -i -E \
+        -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
+        -e 's/^CXX[[:space:]]*[:?+]?=.*/CXX = ccache clang++/' \
+        -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
+        -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
+        kernel/build/_setup_env.sh
       else
         sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
