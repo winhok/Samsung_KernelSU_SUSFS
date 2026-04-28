@@ -247,6 +247,10 @@ jobs:
         with:
          branch: ${{ inputs.branch }}
          ccache: ${{ inputs.ccache }}
+
+      - name: ccache stats
+        if: always()
+        run: ccache -s -v || ccache -s
           
       - name: Prepare AnyKernel3
         uses: ./.github/actions/ak3zip-prep
