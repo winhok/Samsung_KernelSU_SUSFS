@@ -16,7 +16,7 @@ on:
         required: true
         type: string
       build_type:
-        required: true
+        required: false
         type: string
       susfs:
         required: true
