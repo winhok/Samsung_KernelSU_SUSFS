@@ -19,11 +19,15 @@ runs:
      cd "$CONFIG"
      echo "Building the kernel..."
      if [[ ${{ inputs.branch }} == SM-S928B* || "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" || "${{ inputs.branch }}" == "SM-F741B-Oneui8" || "${{ inputs.branch }}" == "SM-X710-Oneui6.1.1" ]]; then
-       chmod +x build_kernel_GKI.sh
-       ./build_kernel_GKI.sh || true
+       cd kernel_platform
+       tools/bazel build //common:kernel_aarch64
+       #chmod +x build_kernel_GKI.sh
+       #./build_kernel_GKI.sh || true
      elif [[ "${{ inputs.branch }}" == "SM-X916B" || "${{ inputs.branch }}" == "SM-F946N-Oneui7" || "${{ inputs.branch }}" == "SM-S916B-Oneui8" || "${{ inputs.branch }}" == "SM-S918B-Oneui8" || "${{ inputs.branch }}" == "SM-F946B-Oneui8" || "${{ inputs.branch }}" == "SM-S901E-Oneui8" || "${{ inputs.branch }}" == "SM-X800-Oneui8" || ${{ inputs.branch }} == SM-S911B* || "${{ inputs.branch }}" == "SM-M556B-Oneui8" ]]; then
-       chmod +x build_kernel_GKI.sh
-       ./build_kernel_GKI.sh || true
+       cd kernel_platform
+       tools/bazel build //common:kernel_aarch64
+       #chmod +x build_kernel_GKI.sh
+       #./build_kernel_GKI.sh || true
      elif [[ ${{ inputs.branch }} == SM-A546* || "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" || "${{ inputs.branch }}" == "SM-S908B-Oneui8-bitK" || ${{ inputs.branch }} == SM-A055* || "${{ inputs.branch }}" == "SM-X610-Oneui6.1.1-bit7" || "${{ inputs.branch }}" == "SM-A166B-Oneui7" ]]; then
        #sudo apt update
        #sudo apt-get install -y libyaml-dev
