@@ -11,22 +11,22 @@ runs:
   - name: parse cache keys
     shell: bash
     run: |
-      if [[ "${{ inputs.branch }}" == "SM-A546B-Oneui7" || "${{ inputs.branch }}" == "SM-A546E-Oneui7" ]]; then
-       BASE_BRANCH="SM-A546X-Oneui7"
-       echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
-      elif [[ "${{ inputs.branch }}" == "SM-A546B-Oneui8" || "${{ inputs.branch }}" == "SM-A546E-Oneui8" ]]; then
-       BASE_BRANCH="SM-A546X-Oneui8"
-       echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
-      elif [[ "${{ inputs.branch }}" == "SM-A055M-Oneui7" || "${{ inputs.branch }}" == "SM-A055F-Oneui7" ]]; then
-       BASE_BRANCH="SM-A055X-Oneui7"
-       echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
-      elif [[ "${{ inputs.branch }}" == "SM-A556B-Oneui7-bitA" || "${{ inputs.branch }}" == "SM-A556E-Oneui7-bitA" ]]; then
-       BASE_BRANCH="SM-A556X-Oneui7"
-       echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
-      else
-       FULL_BRANCH="${{ inputs.branch }}"
-       echo "FULL_BRANCH=$FULL_BRANCH" >> $GITHUB_ENV
-          
-       BASE_BRANCH=$(echo "$FULL_BRANCH" | sed -E 's/(-bit[0-9]+.*$)|(-bit.*$)//i')
-       echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
-      fi
+      #if [[ "${{ inputs.branch }}" == "SM-A546B-Oneui7" || "${{ inputs.branch }}" == "SM-A546E-Oneui7" ]]; then
+       #BASE_BRANCH="SM-A546X-Oneui7"
+       #echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+      #elif [[ "${{ inputs.branch }}" == "SM-A546B-Oneui8" || "${{ inputs.branch }}" == "SM-A546E-Oneui8" ]]; then
+       #BASE_BRANCH="SM-A546X-Oneui8"
+       #echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+      #elif [[ "${{ inputs.branch }}" == "SM-A055M-Oneui7" || "${{ inputs.branch }}" == "SM-A055F-Oneui7" ]]; then
+       #BASE_BRANCH="SM-A055X-Oneui7"
+       #echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+      #elif [[ "${{ inputs.branch }}" == "SM-A556B-Oneui7-bitA" || "${{ inputs.branch }}" == "SM-A556E-Oneui7-bitA" ]]; then
+       #BASE_BRANCH="SM-A556X-Oneui7"
+       #echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+      #else
+        FULL_BRANCH="${{ inputs.branch }}"
+        echo "FULL_BRANCH=$FULL_BRANCH" >> $GITHUB_ENV
+           
+        BASE_BRANCH=$(echo "$FULL_BRANCH" | sed -E 's/(-bit[0-9]+.*$)|(-bit.*$)//i')
+        echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+      #fi
