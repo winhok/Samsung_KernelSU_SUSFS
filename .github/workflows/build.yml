@@ -272,6 +272,8 @@ jobs:
       - name: change variables to ccache
         if: inputs.build_type == 'make'
         uses: ./.github/actions/use-ccache
+        with:
+         branch: ${{ inputs.branch }}
 
       - name: Build
         uses: ./.github/actions/build
