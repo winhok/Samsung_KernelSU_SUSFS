@@ -49,7 +49,7 @@ jobs:
           - branch: "SM-S931B-Oneui8"
             android_version: "android15"
             kernel_version: "6.6"
-            build_type: "Bazel"
+#            build_type: "Bazel"
           - branch: "SM-A055M-Oneui7"
             android_version: "android15"
             kernel_version: "6.6"
