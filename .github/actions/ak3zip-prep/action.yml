@@ -13,14 +13,14 @@ runs:
     run: |
      cd "$CONFIG"
 
-     if [[ "${{ inputs.branch }}" == "SM-S928B-Oneui7" || "${{ inputs.branch }}" == "SM-S928B-Oneui8-bit4" || "${{ inputs.branch }}" == "SM-S928B-Oneui8-bit5" || "${{ inputs.branch }}" == "SM-F741B-Oneui8" ]]; then
+     if [[ -f ./kernel_platform/bazel-bin/common/kernel_aarch64/Image ]]; then
+       cp ./kernel_platform/bazel-bin/common/kernel_aarch64/Image "$ANYKERNEL3/Image"
+     elif [[ "${{ inputs.branch }}" == "SM-S928B-Oneui7" || "${{ inputs.branch }}" == "SM-S928B-Oneui8-bit4" || "${{ inputs.branch }}" == "SM-S928B-Oneui8-bit5" || "${{ inputs.branch }}" == "SM-F741B-Oneui8" ]]; then
        cp ./kernel_platform/sec/dist/Image "$ANYKERNEL3/Image"
      elif [[ "${{ inputs.branch }}" == "SM-S928B-Oneui6.1" ]]; then
        cp ./out/msm-pineapple-pineapple-gki/dist/Image "$ANYKERNEL3/Image"
      elif [[ "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" || "${{ inputs.branch }}" == "SM-M556B-Oneui8" ]]; then
        cp ./kernel_platform/gki/dist/Image "$ANYKERNEL3/Image"
-     elif [[ -f ./$CONFIG/bazel-bin/common/kernel_aarch64/Image ]]; then
-       cp ./$CONFIG/bazel-bin/common/kernel_aarch64/Image "$ANYKERNEL3/Image"
      elif [[ "${{ inputs.branch }}" == "SM-X916B" || "${{ inputs.branch }}" == "SM-F946N-Oneui7" || "${{ inputs.branch }}" == "SM-F946B-Oneui8" || "${{ inputs.branch }}" == "SM-S916B-Oneui8" || "${{ inputs.branch }}" == "SM-S918B-Oneui8" || ${{ inputs.branch }} == SM-S911B* || "${{ inputs.branch }}" == "SM-X710-Oneui6.1.1" ]]; then
        cp ./out/msm-kalama-kalama-gki/dist/Image "$ANYKERNEL3/Image"
      elif [[ ${{ inputs.branch }} == SM-A546* || "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" || "${{ inputs.branch }}" == "SM-S908B-Oneui8-bitK" || "${{ inputs.branch }}" == "SM-X610-Oneui6.1.1-bit7" || "${{ inputs.branch }}" == "SM-A166B-Oneui7" ]]; then
