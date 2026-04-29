@@ -266,11 +266,11 @@ jobs:
          kernel_version: ${{ inputs.kernel_version }}
 
       - name: ensure bazel cache is used
-        if: inputs.build_type == 'Bazel'
+        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
         uses: ./.github/actions/use-bazcache
 
       - name: change variables to ccache
-        if: inputs.build_type == 'make'
+        if: inputs.build_type == 'make' && inputs.cache == 'true'
         uses: ./.github/actions/use-ccache
 
       - name: Build
