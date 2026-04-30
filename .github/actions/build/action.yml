@@ -30,6 +30,9 @@ runs:
       ./build_kernel.sh || true
      elif [[ ${{ inputs.branch }} == SM-S926* ]]; then
        sed -i '/"modules"/d' projects/s5e9945/s5e9945.bzl
+       sed -i '/"modules.builtin.modinfo"/d' projects/s5e9945/build.config.s5e9945.common
+       sed -i '/"modules.builtin"/d' projects/s5e9945/build.config.s5e9945.common
+       sed -i '/"modules.order"/d' projects/s5e9945/build.config.s5e9945.common
        tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e9945:s5e9945_user_dist
        #cd kernel
        #SYMBOL_LIST=android/abi_gki_aarch64_galaxy
@@ -43,6 +46,9 @@ runs:
        #tools/bazel build //kernel:kernel_aarch64
       elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
        sed -i '/"modules"/d' projects/s5e8845/s5e8845.bzl
+       sed -i '/"modules.builtin.modinfo"/d' projects/s5e8845/build.config.s5e8845.common
+       sed -i '/"modules.builtin"/d' projects/s5e8845/build.config.s5e8845.common
+       sed -i '/"modules.order"/d' projects/s5e8845/build.config.s5e8845.common
        tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user_dist
        #cd kernel
        #SYMBOL_LIST=android/abi_gki_aarch64_galaxy
