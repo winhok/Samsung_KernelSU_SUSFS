@@ -126,6 +126,7 @@ jobs:
           "CCACHE_FILE_CLONE=true"
           "CCACHE_INODE_CACHE=true"
           "CCACHE_UMASK=002"
+          "KBUILD_BUILD_TIMESTAMP=2026-01-01"
           "CCACHE_SLOPPINESS=file_macro,time_macros,include_file_mtime,include_file_ctime,pch_defines,system_headers,locale"
           )
 
