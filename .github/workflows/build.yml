@@ -103,11 +103,11 @@ jobs:
 #            bcache-${{ runner.os }}-${{ inputs.build_type }}-
 
       - name: Install ccache
-        if: inputs.build_type == 'make' && inputs.cache == 'true'
+        if: inputs.cache == 'true'
         run: sudo apt-get update && sudo apt-get install -y ccache
         
       - name: Export ccache + determinism
-        if: inputs.build_type == 'make' && inputs.cache == 'true'
+        if: inputs.cache == 'true'
         run: |
           CACHE_DIR="${{ github.workspace }}/.ccache"
           mkdir -p "$CACHE_DIR"
@@ -136,7 +136,7 @@ jobs:
           done
 
       - name: restore ccache
-        if: inputs.build_type == 'make' && inputs.cache == 'true'
+        if: inputs.cache == 'true'
         uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
@@ -146,7 +146,7 @@ jobs:
             ccache-${{ runner.os }}-
             
       - name: Ensure ccache is used
-        if: inputs.build_type == 'make' && inputs.cache == 'true'
+        if: inputs.cache == 'true'
         run: |
           echo "/usr/lib/ccache" >> $GITHUB_PATH
           echo "CC='ccache clang'" >> $GITHUB_ENV
