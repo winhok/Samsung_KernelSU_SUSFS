@@ -14,11 +14,19 @@ runs:
       cat >> .bazelrc << 'EOF'
       #build --disk_cache=${{ env.BCACHE_DIR }}
       build --sandbox_writable_path=${{ env.CCACHE_DIR }}
+      build --action_env=CC="ccache clang"
+      build --action_env=CXX="ccache clang++"
+      build --action_env=HOSTCC="ccache clang"
+      build --action_env=HOSTCXX="ccache clang++"
       EOF
       else
       touch .bazelrc
       cat >> .bazelrc << 'EOF'
       #build --disk_cache=${{ env.BCACHE_DIR }}
       build --sandbox_writable_path=${{ env.CCACHE_DIR }}
+      build --action_env=CC="ccache clang"
+      build --action_env=CXX="ccache clang++"
+      build --action_env=HOSTCC="ccache clang"
+      build --action_env=HOSTCXX="ccache clang++"
       EOF
       fi
