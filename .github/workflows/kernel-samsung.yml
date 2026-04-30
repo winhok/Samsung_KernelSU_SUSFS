@@ -125,7 +125,7 @@ jobs:
           - branch: "SM-X710-Oneui6.1.1"
             android_version: "android13"
             kernel_version: "5.15"
-            build_type: "make"
+            build_type: "Bazel"
           - branch: "SM-X916B"
             android_version: "android13"
             kernel_version: "5.15"
