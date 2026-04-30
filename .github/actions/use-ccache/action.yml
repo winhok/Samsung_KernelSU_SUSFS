@@ -15,7 +15,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/kernel_platform/build/kernel/build.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/kernel_platform/build/kernel/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -23,7 +22,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/kernel_platform/build/kernel/_setup_env.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/kernel_platform/build/build.sh ]]; then
         sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -31,7 +29,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/kernel_platform/build/build.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/kernel_platform/build/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -39,7 +36,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/kernel_platform/build/_setup_env.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/build/kernel/build.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -47,7 +43,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/build/kernel/build.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/build/kernel/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -55,7 +50,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/build/kernel/_setup_env.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/kernel/build/kernel/build.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -63,7 +57,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/kernel/build/kernel/build.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/kernel/build/kernel/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -71,7 +64,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/kernel/build/kernel/_setup_env.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/build/kernel/build.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -79,7 +71,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/build/kernel/build.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/build/kernel/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -87,7 +78,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/build/kernel/_setup_env.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/kernel/build/build.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -95,7 +85,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/kernel/build/build.sh \
-        "$COMMON/Makefile"
       elif [[ -f $CONFIG/kernel/build/_setup_env.sh ]]; then
        sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
@@ -103,7 +92,6 @@ runs:
         -e 's/^HOSTCC[[:space:]]*[:?+]?=.*/HOSTCC = ccache clang/' \
         -e 's/^HOSTCXX[[:space:]]*[:?+]?=.*/HOSTCXX = ccache clang++/' \
         $CONFIG/kernel/build/_setup_env.sh \
-        "$COMMON/Makefile"
       else
         sed -i -E \
         -e 's/^CC[[:space:]]*[:?+]?=.*/CC = ccache clang/' \
