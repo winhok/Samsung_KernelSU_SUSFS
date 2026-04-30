@@ -7,52 +7,91 @@ inputs:
  ccache:
   description: 'build with ccache'
   required: true
+ build_type:
+  description: 'make or bazel'
+  required: true
 
 runs:
  using: composite
  steps:
-  - name: start kernel build
+  - name: start bazel build
+    if: inputs.build_type == 'Bazel'
     shell: bash
     run: |
      set -e
      set -x
      cd "$CONFIG"
      echo "Building the kernel..."
-     if [[ ${{ inputs.branch }} == SM-S928B* || "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" || "${{ inputs.branch }}" == "SM-F741B-Oneui8" || "${{ inputs.branch }}" == "SM-X710-Oneui6.1.1" ]]; then
-       cd kernel_platform
-       tools/bazel build //common:kernel_aarch64
+     if [[ -d kernel_platform ]]; then
+      cd kernel_platform
+      tools/bazel build //common:kernel_aarch64
+     elif [[ ${{ inputs.branch }} == SM-A055* ]]; then
+      chmod +x build_kernel.sh
+      ./build_kernel.sh || true
+     elif [[ ${{ inputs.branch }} == SM-S926* ]]; then
+       tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e9945:s5e9945_user
+       #cd kernel
+       #SYMBOL_LIST=android/abi_gki_aarch64_galaxy
+       #echo "find_in_flight_task_in_one_workqueue" >> $SYMBOL_LIST
+       #sed -i '
+       #/"kernel_aarch64": {/,/},/ {
+       #s/"kmi_symbol_list_strict_mode": True/"kmi_symbol_list_strict_mode": False/
+       #s/"trim_nonlisted_kmi": True/"trim_nonlisted_kmi": False/
+       #}
+       #cd ..
+       #tools/bazel build //kernel:kernel_aarch64
+      elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
+       tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user
+       #cd kernel
+       #SYMBOL_LIST=android/abi_gki_aarch64_galaxy
+       #echo "find_in_flight_task_in_one_workqueue" >> $SYMBOL_LIST
+       #sed -i '
+       #/"kernel_aarch64": {/,/},/ {
+       #s/"kmi_symbol_list_strict_mode": True/"kmi_symbol_list_strict_mode": False/
+       #s/"trim_nonlisted_kmi": True/"trim_nonlisted_kmi": False/
+       #}
+       #cd ..
+       #tools/bazel build //kernel:kernel_aarch64
+      fi
+      
+  - name: start make build
+    if: inputs.build_type == 'make'
+    shell: bash
+    run: |
+     set -e
+     set -x
+     cd "$CONFIG"
+     if [[ -f build_kernel_GKI.sh ]]; then
+      chmod +x build_kernel_GKI.sh
+      ./build_kernel_GKI.sh || true
+     elif [[ -f build_kernel.sh ]]; then
+      sudo apt update
+      sudo apt-get install -y libyaml-dev
+      chmod +x build_kernel.sh
+      ./build_kernel.sh || true
+     fi
+     
+     #if [[ ${{ inputs.branch }} == SM-S928B* || "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" || "${{ inputs.branch }}" == "SM-F741B-Oneui8" || "${{ inputs.branch }}" == "SM-X710-Oneui6.1.1" ]]; then
+       #cd kernel_platform
+       #tools/bazel build //common:kernel_aarch64
        #chmod +x build_kernel_GKI.sh
        #./build_kernel_GKI.sh || true
-     elif [[ "${{ inputs.branch }}" == "SM-X916B" || "${{ inputs.branch }}" == "SM-F946N-Oneui7" || "${{ inputs.branch }}" == "SM-S916B-Oneui8" || "${{ inputs.branch }}" == "SM-S918B-Oneui8" || "${{ inputs.branch }}" == "SM-F946B-Oneui8" || "${{ inputs.branch }}" == "SM-S901E-Oneui8" || "${{ inputs.branch }}" == "SM-X800-Oneui8" || ${{ inputs.branch }} == SM-S911B* || "${{ inputs.branch }}" == "SM-M556B-Oneui8" ]]; then
-       cd kernel_platform
-       tools/bazel build //common:kernel_aarch64
+     #elif [[ "${{ inputs.branch }}" == "SM-X916B" || "${{ inputs.branch }}" == "SM-F946N-Oneui7" || "${{ inputs.branch }}" == "SM-S916B-Oneui8" || "${{ inputs.branch }}" == "SM-S918B-Oneui8" || "${{ inputs.branch }}" == "SM-F946B-Oneui8" || "${{ inputs.branch }}" == "SM-S901E-Oneui8" || "${{ inputs.branch }}" == "SM-X800-Oneui8" || ${{ inputs.branch }} == SM-S911B* || "${{ inputs.branch }}" == "SM-M556B-Oneui8" ]]; then
+       #cd kernel_platform
+       #tools/bazel build //common:kernel_aarch64
        #chmod +x build_kernel_GKI.sh
        #./build_kernel_GKI.sh || true
-     elif [[ ${{ inputs.branch }} == SM-A546* || "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" || "${{ inputs.branch }}" == "SM-S908B-Oneui8-bitK" || ${{ inputs.branch }} == SM-A055* || "${{ inputs.branch }}" == "SM-X610-Oneui6.1.1-bit7" || "${{ inputs.branch }}" == "SM-A166B-Oneui7" ]]; then
+     #elif [[ ${{ inputs.branch }} == SM-A546* || "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" || "${{ inputs.branch }}" == "SM-S908B-Oneui8-bitK" || ${{ inputs.branch }} == SM-A055* || "${{ inputs.branch }}" == "SM-X610-Oneui6.1.1-bit7" || "${{ inputs.branch }}" == "SM-A166B-Oneui7" ]]; then
        #sudo apt update
        #sudo apt-get install -y libyaml-dev
-       chmod +x build_kernel.sh
-       ./build_kernel.sh || true
-     elif [[ "${{ inputs.branch }}" == "SM-A566B" ]]; then
-       chmod +x build_script.sh
-       touch ./kernel-6.6/abi_symbollist.raw
-       touch ./kernel-6.6/abi_symbollist
-       ./build_script.sh || true
-     elif [[ ${{ inputs.branch }} == SM-S926B* ]]; then
-       #tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e9945:s5e9945_user_dist
-       cd kernel
-       SYMBOL_LIST=android/abi_gki_aarch64_galaxy
-       echo "find_in_flight_task_in_one_workqueue" >> $SYMBOL_LIST
-       cd ..
-       tools/bazel build //kernel:kernel_aarch64
-     elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
-       #tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user_dist
-       cd kernel
-       SYMBOL_LIST=android/abi_gki_aarch64_galaxy
-       echo "find_in_flight_task_in_one_workqueue" >> $SYMBOL_LIST
-       cd ..
-       tools/bazel build //kernel:kernel_aarch64
-     elif [[ "${{ inputs.branch }}" == "SM-A075M-Oneui7" ]]; then
-       chmod +x build_kernel.sh
-       ./build_kernel.sh
-     fi
+       #chmod +x build_kernel.sh
+       #./build_kernel.sh || true
+     #elif [[ "${{ inputs.branch }}" == "SM-A566B" ]]; then
+       #chmod +x build_script.sh
+       #touch ./kernel-6.6/abi_symbollist.raw
+       #touch ./kernel-6.6/abi_symbollist
+       #./build_script.sh || true
+     #elif [[ "${{ inputs.branch }}" == "SM-A075M-Oneui7" ]]; then
+       #chmod +x build_kernel.sh
+       #./build_kernel.sh
+     #fi
