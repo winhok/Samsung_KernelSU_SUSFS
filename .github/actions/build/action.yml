@@ -33,30 +33,10 @@ runs:
        sed -i '/"modules.builtin.modinfo"/d' projects/s5e9945/build.config.s5e9945.common
        sed -i '/"modules.builtin"/d' projects/s5e9945/build.config.s5e9945.common
        sed -i '/"modules.order"/d' projects/s5e9945/build.config.s5e9945.common
-       sed -i \
-       -e '/^VENDOR_EARLY_MODULE_LIST = \[/,/^]/c\VENDOR_EARLY_MODULE_LIST = []' \
-       -e '/^VENDOR_MODULE_LIST = \[/,/^]/c\VENDOR_MODULE_LIST = []' \
-       -e '/^VENDOR_DEV_MODULE_LIST = \[/,/^]/c\VENDOR_DEV_MODULE_LIST = []' \
-       -e '/^VENDOR_DLKM_MODULE_LIST = \[/,/^]/c\VENDOR_DLKM_MODULE_LIST = []' \
-       -e '/^FACTORY_BUILD_MODULE_LIST = \[/,/^]/c\FACTORY_BUILD_MODULE_LIST = []' \
-       projects/s5e9945/s5e9945_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_b6s_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_b7r_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_e1s_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_e2s_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_model_variant_modules.bzl
-
-       sed -i \
-       -e '/^VENDOR_EARLY_MODULE_LIST = \[/,/^]/c\VENDOR_EARLY_MODULE_LIST = []' \
-       -e '/^VENDOR_MODULE_LIST = \[/,/^]/c\VENDOR_MODULE_LIST = []' \
-       -e '/^VENDOR_DEV_MODULE_LIST = \[/,/^]/c\VENDOR_DEV_MODULE_LIST = []' \
-       -e '/^VENDOR_DLKM_MODULE_LIST = \[/,/^]/c\VENDOR_DLKM_MODULE_LIST = []' \
-       -e '/^FACTORY_BUILD_MODULE_LIST = \[/,/^]/c\FACTORY_BUILD_MODULE_LIST = []' \
-       projects/s5e9945/s5e9945_evt0_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_mu1s_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_mu2s_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_mu3s_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e9945/s5e9945_r12s_modules.bzl
+       sed -i '/"modules.builtin.modinfo"/d' projects/s5e9945/s5e9945.bzl
+       sed -i '/"modules.builtin"/d' projects/s5e9945/s5e9945.bzl
+       sed -i '/"modules.order"/d' projects/s5e9945/s5e9945.bzl
+       sed -i '/"Module.symvers"/d' projects/s5e9945/s5e9945.bzl
        tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e9945:s5e9945_user_dist
        #cd kernel
        #SYMBOL_LIST=android/abi_gki_aarch64_galaxy
@@ -73,17 +53,10 @@ runs:
        sed -i '/"modules.builtin.modinfo"/d' projects/s5e8845/build.config.s5e8845.common
        sed -i '/"modules.builtin"/d' projects/s5e8845/build.config.s5e8845.common
        sed -i '/"modules.order"/d' projects/s5e8845/build.config.s5e8845.common
-       sed -i \
-       -e '/^VENDOR_EARLY_MODULE_LIST = \[/,/^]/c\VENDOR_EARLY_MODULE_LIST = []' \
-       -e '/^VENDOR_MODULE_LIST = \[/,/^]/c\VENDOR_MODULE_LIST = []' \
-       -e '/^VENDOR_DEV_MODULE_LIST = \[/,/^]/c\VENDOR_DEV_MODULE_LIST = []' \
-       -e '/^VENDOR_DLKM_MODULE_LIST = \[/,/^]/c\VENDOR_DLKM_MODULE_LIST = []' \
-       -e '/^FACTORY_BUILD_MODULE_LIST = \[/,/^]/c\FACTORY_BUILD_MODULE_LIST = []' \
-       projects/s5e8845/s5e8845_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e8845/s5e8845_a55x_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e8845/s5e8845_m56x_modules.bzl
-       sed -i '/^MODEL_VARIANT_MODULE_LIST = \[/,/^]/c\MODEL_VARIANT_MODULE_LIST = []' projects/s5e8845/s5e8845_model_variant_modules.bzl
-       
+       sed -i '/"modules.builtin.modinfo"/d' projects/s5e8845/s5e8845.bzl
+       sed -i '/"modules.builtin"/d' projects/s5e8845/s5e8845.bzl
+       sed -i '/"modules.order"/d' projects/s5e8845/s5e8845.bzl
+       sed -i '/"Module.symvers"/d' projects/s5e8845/s5e8845.bzl
        tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user_dist
        #cd kernel
        #SYMBOL_LIST=android/abi_gki_aarch64_galaxy
