@@ -29,29 +29,29 @@ runs:
       chmod +x build_kernel.sh
       ./build_kernel.sh || true
      elif [[ ${{ inputs.branch }} == SM-S926* ]]; then
-       tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e9945:s5e9945_user_dist
-       #cd kernel
-       #SYMBOL_LIST=android/abi_gki_aarch64_galaxy
-       #echo "find_in_flight_task_in_one_workqueue" >> $SYMBOL_LIST
-       #sed -i '
-       #/"kernel_aarch64": {/,/},/ {
-       #s/"kmi_symbol_list_strict_mode": True/"kmi_symbol_list_strict_mode": False/
-       #s/"trim_nonlisted_kmi": True/"trim_nonlisted_kmi": False/
-       #}
-       #cd ..
-       #tools/bazel build //kernel:kernel_aarch64
+       #tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e9945:s5e9945_user_dist
+       cd kernel
+       SYMBOL_LIST=android/abi_gki_aarch64_galaxy
+       echo "find_in_flight_task_in_one_workqueue" >> $SYMBOL_LIST
+       sed -i '
+       /"kernel_aarch64": {/,/},/ {
+       s/"kmi_symbol_list_strict_mode": True/"kmi_symbol_list_strict_mode": False/
+       s/"trim_nonlisted_kmi": True/"trim_nonlisted_kmi": False/
+       }
+       cd ..
+       tools/bazel build //kernel:kernel_aarch64
       elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
-       tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user_dist
-       #cd kernel
-       #SYMBOL_LIST=android/abi_gki_aarch64_galaxy
-       #echo "find_in_flight_task_in_one_workqueue" >> $SYMBOL_LIST
-       #sed -i '
-       #/"kernel_aarch64": {/,/},/ {
-       #s/"kmi_symbol_list_strict_mode": True/"kmi_symbol_list_strict_mode": False/
-       #s/"trim_nonlisted_kmi": True/"trim_nonlisted_kmi": False/
-       #}
-       #cd ..
-       #tools/bazel build //kernel:kernel_aarch64
+       #tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user_dist
+       cd kernel
+       SYMBOL_LIST=android/abi_gki_aarch64_galaxy
+       echo "find_in_flight_task_in_one_workqueue" >> $SYMBOL_LIST
+       sed -i '
+       /"kernel_aarch64": {/,/},/ {
+       s/"kmi_symbol_list_strict_mode": True/"kmi_symbol_list_strict_mode": False/
+       s/"trim_nonlisted_kmi": True/"trim_nonlisted_kmi": False/
+       }
+       cd ..
+       tools/bazel build //kernel:kernel_aarch64
       fi
       
   - name: start make build
