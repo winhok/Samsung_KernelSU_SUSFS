@@ -280,8 +280,12 @@ jobs:
          branch: ${{ inputs.branch }}
          build_type: ${{ inputs.build_type }}
 
+      - name: clean up ccache
+        if: inputs.cache == 'true' && inputs.build_type == 'make'
+        run: ccache -c
+        
       - name: ccache stats
-        if: inputs.cache == 'true'
+        if: inputs.cache == 'true' && inputs.build_type == 'make'
         run: ccache -s -v || ccache -s
 
 #      - name: bazel cache stats
