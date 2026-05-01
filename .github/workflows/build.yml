@@ -121,7 +121,6 @@ jobs:
           "CCACHE_IGNOREOPTIONS=-sysroot*"
           "CCACHE_COMPRESS=true"
           "CCACHE_COMPRESSLEVEL=12"
-          "CCACHE_BASEDIR=${GITHUB_WORKSPACE}"
           "CCACHE_DIRECT=true"
           "CCACHE_FILE_CLONE=true"
           "CCACHE_INODE_CACHE=true"
