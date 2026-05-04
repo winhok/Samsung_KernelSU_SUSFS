@@ -110,6 +110,7 @@ jobs:
         run: |
           CACHE_DIR="${{ github.workspace }}/.ccache"
           mkdir -p "$CACHE_DIR"
+          CCACHE_LOG="${{ github.workspace }}/ccache.log
           
           SETTINGS=(
           "CCACHE_DIR=$CACHE_DIR"
@@ -132,6 +133,10 @@ jobs:
            export "$setting"
            echo "$setting" >> $GITHUB_ENV
           done
+
+          # ccache log file for debugging hit rate
+          export "CCACHE_LOGFILE=$CCACHE_LOG"
+          echo "CCACHE_LOGFILE=$CCACHE_LOG" >> $GITHUB_ENV
 
       - name: restore ccache
         if: inputs.cache == 'true' && inputs.build_type == 'make'
@@ -281,6 +286,19 @@ jobs:
       - name: clean up ccache
         if: inputs.cache == 'true' && inputs.build_type == 'make'
         run: ccache -c
+
+      - name: get ccache log
+        if: inputs.cache == 'true' && inputs.build_type == 'make'
+        run: |
+          if [ -f "${{ env.CCACHE_LOGFILE }}" ]; then
+            echo "Rename ccache log"
+            LOG_DIR=$(dirname "${{ env.CCACHE_LOGFILE }}")
+            NEW_LOG_NAME="${{ inputs.branch }}_ccache.log"
+            mv "${{ env.CCACHE_LOGFILE }}" "$LOG_DIR/$NEW_LOG_NAME"
+            echo "CCACHE_LOGFILE=$LOG_DIR/$NEW_LOG_NAME" >> $GITHUB_ENV
+          else
+            echo "⚠ ccache log not found, skipping rename."
+          fi
         
       - name: ccache stats
         if: inputs.cache == 'true' && inputs.build_type == 'make'
@@ -303,6 +321,16 @@ jobs:
           path: |
             ./AnyKernel3/**
           compression-level: 9
+
+      - name: Upload ccache log
+        if: inputs.cache == 'true' && inputs.build_type == 'make'
+        uses: actions/upload-artifact@v6
+        with:
+         name: "${{ inputs.branch }}_ccache.log"
+         path: ${{ env.CCACHE_LOGFILE }}
+         archive: false
+         compression-level: 0
+         retention-days: 90
       
       - name: Scan and collect patch rejects
         if: ${{ always() }}
