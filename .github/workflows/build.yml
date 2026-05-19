@@ -85,21 +85,21 @@ jobs:
         with:
          branch: ${{ inputs.branch }}
 
-      - name: set up bazel cache dir
-        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
-        run: |
-          BCACHE_DIR="${{ github.workspace }}/.cache/bazel-disk-kernel"
-          mkdir -p "$BCACHE_DIR"
-          echo "BCACHE_DIR=$BCACHE_DIR" >> $GITHUB_ENV
+#      - name: set up bazel cache dir
+#        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
+#        run: |
+#          BCACHE_DIR="${{ github.workspace }}/.cache/bazel-disk-kernel"
+#          mkdir -p "$BCACHE_DIR"
+#          echo "BCACHE_DIR=$BCACHE_DIR" >> $GITHUB_ENV
 
-      - name: set up bazel cache
-        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
-        uses: actions/cache@v4
-        with:
-         path: ${{ env.BCACHE_DIR }}
-         key: bcache-${{ runner.os }}-${{ inputs.build_type }}-${{ env.FULL_BRANCH }}
-         restore-keys: |
-            bcache-${{ runner.os }}-${{ inputs.build_type }}-${{ env.FULL_BRANCH }}
+ #     - name: set up bazel cache
+ #       if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
+ #       uses: actions/cache@v4
+ #       with:
+ #        path: ${{ env.BCACHE_DIR }}
+ #        key: bcache-${{ runner.os }}-${{ inputs.build_type }}-${{ env.FULL_BRANCH }}
+ #        restore-keys: |
+ #           bcache-${{ runner.os }}-${{ inputs.build_type }}-${{ env.FULL_BRANCH }}
 
       - name: Install ccache
         if: inputs.cache == 'true' && inputs.build_type == 'make'
@@ -275,9 +275,9 @@ jobs:
          android_version: ${{ inputs.android_version }}
          kernel_version: ${{ inputs.kernel_version }}
 
-      - name: ensure bazel cache is set to be used
-        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
-        uses: ./.github/actions/use-bazcache
+#      - name: ensure bazel cache is set to be used
+#        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
+#        uses: ./.github/actions/use-bazcache
 
       - name: change variables to ccache
         if: inputs.cache == 'true' && inputs.build_type == 'make'
