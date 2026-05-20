@@ -31,15 +31,15 @@ runs:
       SUSFS_BRANCH="gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}"
       git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
      
-      cd susfs4ksu
-      if [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android12-5.10" ]]; then
-        COMMIT=86114db0c49f20fa7857b8b559f3ab87cbc2d00d
-      elif [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android13-5.15" ]]; then
-        COMMIT=e4bd49f708108cc829fe7ca079312ea8fefa89f8
-      elif [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android14-6.1" ]]; then
-        COMMIT=9bf72ec2c83d40f194b936cabbc64ce342e005bf
-      elif [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android15-6.6" ]]; then
-        COMMIT=2df41de789026a6422521606402576507c687435
-      fi
-      git checkout "$COMMIT"
+      #cd susfs4ksu
+      #if [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android12-5.10" ]]; then
+      #  COMMIT=86114db0c49f20fa7857b8b559f3ab87cbc2d00d
+      #elif [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android13-5.15" ]]; then
+      #  COMMIT=e4bd49f708108cc829fe7ca079312ea8fefa89f8
+      #elif [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android14-6.1" ]]; then
+      #  COMMIT=9bf72ec2c83d40f194b936cabbc64ce342e005bf
+      #elif [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android15-6.6" ]]; then
+      #  COMMIT=2df41de789026a6422521606402576507c687435
+      #fi
+      #git checkout "$COMMIT"
      fi
