@@ -28,8 +28,6 @@ runs:
        #Fix rejects from adding susfs to KSUN
        cp "$KERNEL_PATCHES/next/susfs_fix_patches/$SUSFS_VERSION/"*.patch .
        rm -rf multi_manager.patch
-       rm -rf fix_kernel_umount.c.patch
-       rm -rf fix_supercall.c.patch
        for p in *.patch; do
            patch -p1 < "$p"
            rm -f "$p"
