@@ -42,10 +42,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - branch: "SM-S938B-Oneui7"
-            android_version: "android15"
-            kernel_version: "6.6"
-            build_type: "Bazel"
+#          - branch: "SM-S938B-Oneui7"
+#            android_version: "android15"
+#            kernel_version: "6.6"
+#            build_type: "Bazel"
           - branch: "SM-S931B-Oneui8"
             android_version: "android15"
             kernel_version: "6.6"
