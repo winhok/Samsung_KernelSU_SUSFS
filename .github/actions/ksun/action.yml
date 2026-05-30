@@ -14,7 +14,7 @@ runs:
         cd KernelSU-Next
         git checkout c2013a15ae1eaca69032fa6016ffefb70adf6146
 
-        cd KernelSU-Next/kernel
+        cd kernel
         COMMITS_COUNT=$(/usr/bin/git rev-list --count HEAD)
         BASE_VERSION=30000
         KSU_VERSION=$(expr $COMMITS_COUNT "+" $BASE_VERSION)
