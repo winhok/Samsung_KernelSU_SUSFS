@@ -17,21 +17,21 @@ runs:
    - name: Apply to KSUN
      shell: bash
      run: |
-       cd "$COMMON/KernelSU-Next"
-       SUSFS_VERSION="v2.1.0"
+       #cd "$COMMON/KernelSU-Next"
+       #SUSFS_VERSION="v2.1.0"
           
        # Apply SUSFS to KernelSU-Next
-       cp "$SUSFS4KSU/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch" .
-       patch -p1 < 10_enable_susfs_for_ksu.patch || true
-       rm -rf 10_enable_susfs_for_ksu.patch
+       #cp "$SUSFS4KSU/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch" .
+       #patch -p1 < 10_enable_susfs_for_ksu.patch || true
+       #rm -rf 10_enable_susfs_for_ksu.patch
 
        #Fix rejects from adding susfs to KSUN
-       cp "$KERNEL_PATCHES/next/susfs_fix_patches/$SUSFS_VERSION/"*.patch .
-       rm -rf multi_manager.patch
-       for p in *.patch; do
-           patch -p1 < "$p"
-           rm -f "$p"
-       done
+       #cp "$KERNEL_PATCHES/next/susfs_fix_patches/$SUSFS_VERSION/"*.patch .
+       #rm -rf multi_manager.patch
+       #for p in *.patch; do
+       #    patch -p1 < "$p"
+       #    rm -f "$p"
+       #done
        
    - name: Apply to Kernel
      shell: bash
