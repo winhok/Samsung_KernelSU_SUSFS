@@ -135,10 +135,6 @@ jobs:
            echo "$setting" >> $GITHUB_ENV
           done
 
-          # ccache log file for debugging hit rate
-          export "CCACHE_LOGFILE=$CCACHE_LOG"
-          echo "CCACHE_LOGFILE=$CCACHE_LOG" >> $GITHUB_ENV
-
           if ccache --help 2>&1 | grep -q 'depend_mode'; then
               export CCACHE_DEPEND=true
               echo "CCACHE_DEPEND=true" >> "$GITHUB_ENV"
@@ -294,19 +290,6 @@ jobs:
       - name: clean up ccache
         if: inputs.cache == 'true' && inputs.build_type == 'make'
         run: ccache -c
-
-      - name: get ccache log
-        if: inputs.cache == 'true' && inputs.build_type == 'make'
-        run: |
-          if [ -f "${{ env.CCACHE_LOGFILE }}" ]; then
-            echo "Rename ccache log"
-            LOG_DIR=$(dirname "${{ env.CCACHE_LOGFILE }}")
-            NEW_LOG_NAME="${{ inputs.branch }}_ccache.log"
-            mv "${{ env.CCACHE_LOGFILE }}" "$LOG_DIR/$NEW_LOG_NAME"
-            echo "CCACHE_LOGFILE=$LOG_DIR/$NEW_LOG_NAME" >> $GITHUB_ENV
-          else
-            echo "⚠ ccache log not found, skipping rename."
-          fi
         
       - name: ccache stats
         if: inputs.cache == 'true' && inputs.build_type == 'make'
