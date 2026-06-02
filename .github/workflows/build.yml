@@ -202,6 +202,8 @@ jobs:
       - name: Add KernelSU-Next
         if: inputs.ksun == 'true'
         uses: ./.github/actions/ksun
+        with:
+          susfs: ${{ inputs.susfs }}
         
       - name: Apply SUSFS Patches
         if: inputs.susfs == 'true'
