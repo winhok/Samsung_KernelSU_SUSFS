@@ -8,6 +8,13 @@ inputs:
 runs:
  using: composite
  steps:
+  - name: add kernel checking to script
+    shell: bash
+    run: |
+     cd "$ANYKERNEL3"
+
+     sed -i 's/do.check_boot_version=.*/do.check_boot_version=1/' anykernel.sh
+     
   - name: copy image to ak3 folder depending on branch
     shell: bash
     run: |
