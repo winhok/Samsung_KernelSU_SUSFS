@@ -38,20 +38,28 @@ runs:
        cp ./kernel-6.6/out/arch/arm64/boot/Image "$ANYKERNEL3/Image"
      elif [[ ${{ inputs.branch }} == SM-S926B* ]]; then
        #cp ./out/s5e9945_user/dist/Image "$ANYKERNEL3/Image"
-       cp ./out/bazel/output_user_root/21809041852a665e882d1603d91872a4/execroot/__main__/bazel-out/k8-fastbuild/bin/projects/s5e9945/s5e9945_user/Image "$ANYKERNEL3/Image"
+       KERNEL_IMAGE=$(find out -type f -name "Image" | head -n1)
+       echo "$KERNEL_IMAGE"
+       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
      elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
        #cp ./out/s5e8845_user/dist/Image "$ANYKERNEL3/Image"
-       cp ./out/bazel/output_user_root/21809041852a665e882d1603d91872a4/execroot/__main__/bazel-out/k8-fastbuild/bin/projects/s5e8845/s5e8845_user/Image "$ANYKERNEL3/Image"
+       KERNEL_IMAGE=$(find out -type f -name "Image" | head -n1)
+       echo "$KERNEL_IMAGE"
+       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
      elif [[ "${{ inputs.branch }}" == "SM-S901E-Oneui8" || "${{ inputs.branch }}" == "SM-X800-Oneui8" ]]; then
        cp ./out/msm-waipio-waipio-gki/dist/Image "$ANYKERNEL3/Image"
      elif [[ ${{ inputs.branch }} == SM-A055* ]]; then
        #cp ./out/target/product/a05m/obj/KLEAF_OBJ/dist/kernel_device_modules-6.6/mgk_64_k66_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
-       cp ./out/target/product/a05m/obj/KLEAF_OBJ/bazel-out/aarch64-fastbuild/arch/arm64/boot/Image.gz "$ANYKERNEL3/Image.gz"
+       KERNEL_IMAGE=$(find out -type f -name "Image.gz" | head -n1)
+       echo "$KERNEL_IMAGE"
+       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image.gz"
      elif [[ "${{ inputs.branch }}" == "SM-A075M-Oneui7" ]]; then
        cp ./out/target/product/a07/obj/KERNEL_OBJ/kernel-5.10/arch/arm64/boot/Image.gz "$ANYKERNEL3/Image.gz"
      elif [[ ${{ inputs.branch }} == SM-X926* ]]; then
        #cp ./out/target/product/gts10u/obj/KLEAF_OBJ/dist/kernel_device_modules-6.1/mgk_64_k61_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
-       cp ./out/target/product/gts10u/obj/KLEAF_OBJ/bazel/output_user_root/output_base/execroot/__main__/bazel-out/k8-fastbuild/bin/kernel_device_modules-6.1/mgk_64_k61_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
+       KERNEL_IMAGE=$(find out -type f -name "Image.gz" | head -n1)
+       echo "$KERNEL_IMAGE"
+       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image.gz"
      else
        echo "Error: Image file not found in any expected location"
        exit 1
