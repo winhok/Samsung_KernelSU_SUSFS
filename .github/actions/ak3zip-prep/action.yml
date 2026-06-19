@@ -47,7 +47,8 @@ runs:
      elif [[ "${{ inputs.branch }}" == "SM-A075M-Oneui7" ]]; then
        cp ./out/target/product/a07/obj/KERNEL_OBJ/kernel-5.10/arch/arm64/boot/Image.gz "$ANYKERNEL3/Image.gz"
      elif [[ ${{ inputs.branch }} == SM-X926* ]]; then
-       cp ./out/target/product/gts10u/obj/KLEAF_OBJ/dist/kernel_device_modules-6.1/mgk_64_k61_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
+       #cp ./out/target/product/gts10u/obj/KLEAF_OBJ/dist/kernel_device_modules-6.1/mgk_64_k61_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
+       cp ./out/target/product/gts10u/obj/KLEAF_OBJ/bazel/output_user_root/output_base/execroot/__main__/bazel-out/k8-fastbuild/bin/kernel_device_modules-6.1/mgk_64_k61_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
      else
        echo "Error: Image file not found in any expected location"
        exit 1
