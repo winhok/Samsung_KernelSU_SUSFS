@@ -37,9 +37,11 @@ runs:
      elif [[ "${{ inputs.branch }}" == "SM-A566B" ]]; then
        cp ./kernel-6.6/out/arch/arm64/boot/Image "$ANYKERNEL3/Image"
      elif [[ ${{ inputs.branch }} == SM-S926B* ]]; then
-       cp ./out/s5e9945_user/dist/Image "$ANYKERNEL3/Image"
+       #cp ./out/s5e9945_user/dist/Image "$ANYKERNEL3/Image"
+       cp ./out/bazel/output_user_root/21809041852a665e882d1603d91872a4/execroot/__main__/bazel-out/k8-fastbuild/bin/projects/s5e9945/s5e9945_user/Image "$ANYKERNEL3/Image"
      elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
-       cp ./out/s5e8845_user/dist/Image "$ANYKERNEL3/Image"
+       #cp ./out/s5e8845_user/dist/Image "$ANYKERNEL3/Image"
+       cp ./out/bazel/output_user_root/21809041852a665e882d1603d91872a4/execroot/__main__/bazel-out/k8-fastbuild/bin/projects/s5e8845/s5e8845_user/Image "$ANYKERNEL3/Image"
      elif [[ "${{ inputs.branch }}" == "SM-S901E-Oneui8" || "${{ inputs.branch }}" == "SM-X800-Oneui8" ]]; then
        cp ./out/msm-waipio-waipio-gki/dist/Image "$ANYKERNEL3/Image"
      elif [[ ${{ inputs.branch }} == SM-A055* ]]; then
