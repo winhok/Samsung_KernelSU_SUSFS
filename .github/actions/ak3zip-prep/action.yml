@@ -8,19 +8,17 @@ inputs:
 runs:
  using: composite
  steps:
-  - name: add kernel checking to script
-    shell: bash
-    run: |
-     cd "$ANYKERNEL3"
-
-     sed -i 's/do.check_boot_version=.*/do.check_boot_version=1/' anykernel.sh
      
   - name: copy image to ak3 folder depending on branch
     shell: bash
     run: |
      cd "$CONFIG"
 
-     if [[ -f ./kernel_platform/bazel-bin/common/kernel_aarch64/Image ]]; then
+     if [[ ${{ inputs.branch }} == SM-S928B* ]]; then
+      KERNEL_IMAGE=$(find kernel_platform/out -type f -path "*_kbuild_mixed_tree/Image" | head -n1)
+      echo "$KERNEL_IMAGE"
+      cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
+     elif [[ -f ./kernel_platform/bazel-bin/common/kernel_aarch64/Image ]]; then
        cp ./kernel_platform/bazel-bin/common/kernel_aarch64/Image "$ANYKERNEL3/Image"
      elif [[ -f ./bazel-bin/kernel/kernel_aarch64/Image ]]; then
      cp ./bazel-bin/kernel/kernel_aarch64/Image "$ANYKERNEL3/Image"
