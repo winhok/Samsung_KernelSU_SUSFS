@@ -22,7 +22,10 @@ runs:
      set -x
      cd "$CONFIG"
      echo "Building the kernel..."
-     if [[ -d kernel_platform ]]; then
+     if [[ ${{ inputs.branch }} == SM-S928B* ]]; then
+      chmod +x build_kernel_GKI.sh
+      ./build_kernel_GKI.sh || true
+     elif [[ -d kernel_platform ]]; then
       cd kernel_platform
       tools/bazel build //common:kernel_aarch64
      elif [[ ${{ inputs.branch }} == SM-A055* || ${{ inputs.branch }} == SM-X926B* ]]; then
