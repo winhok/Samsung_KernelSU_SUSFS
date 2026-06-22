@@ -14,7 +14,7 @@ runs:
     run: |
      cd "$CONFIG"
 
-     if [[ ${{ inputs.branch }} == SM-S928B* ]]; then
+     if [[ ${{ inputs.branch }} == SM-S928B* || ${{ inputs.branch }} == SM-S931* || ${{ inputs.branch }} == SM-X926* || ${{ inputs.branch }} == SM-F741* ]]; then
       KERNEL_IMAGE=$(find kernel_platform/out -type f -path "*_kbuild_mixed_tree/Image" | head -n1)
       echo "$KERNEL_IMAGE"
       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
