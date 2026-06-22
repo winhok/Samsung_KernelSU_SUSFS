@@ -10,6 +10,9 @@ inputs:
  build_type:
   description: 'make or bazel'
   required: true
+ kernel_version:
+  description: 'version of kernel'
+  required: true
 
 runs:
  using: composite
@@ -22,13 +25,7 @@ runs:
      set -x
      cd "$CONFIG"
      echo "Building the kernel..."
-     if [[ ${{ inputs.branch }} == SM-S928B* ]]; then
-      chmod +x build_kernel_GKI.sh
-      ./build_kernel_GKI.sh || true
-     elif [[ -d kernel_platform ]]; then
-      cd kernel_platform
-      tools/bazel build //common:kernel_aarch64
-     elif [[ ${{ inputs.branch }} == SM-A055* || ${{ inputs.branch }} == SM-X926B* ]]; then
+     if [[ ${{ inputs.branch }} == SM-A055* || ${{ inputs.branch }} == SM-X926B* ]]; then
       chmod +x build_kernel.sh
       ./build_kernel.sh || true
      elif [[ ${{ inputs.branch }} == SM-S926* ]]; then
@@ -37,7 +34,13 @@ runs:
       elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
        #tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user_dist
        tools/bazel build --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user
-      fi
+     elif [[ ${{ inputs.kernel_verion }} == 6.* ]]; then
+      chmod +x build_kernel_GKI.sh
+      ./build_kernel_GKI.sh || true
+     elif [[ -d kernel_platform ]]; then
+      cd kernel_platform
+      tools/bazel build //common:kernel_aarch64
+     fi
       
   - name: start make build
     if: inputs.build_type == 'make'
