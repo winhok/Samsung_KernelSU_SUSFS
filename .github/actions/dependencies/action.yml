@@ -28,7 +28,7 @@ runs:
      fi
 
      if [[ ${{ inputs.susfs }} == 'true' ]]; then
-      SUSFS_BRANCH="gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}"
+      SUSFS_BRANCH="gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}-dev"
       git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
      
       #cd susfs4ksu
