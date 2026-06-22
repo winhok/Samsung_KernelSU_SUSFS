@@ -286,6 +286,7 @@ jobs:
         with:
          branch: ${{ inputs.branch }}
          build_type: ${{ inputs.build_type }}
+         kernel_version: ${{ inputs.kernel_version }}
 
       - name: clean up ccache
         if: inputs.cache == 'true' && inputs.build_type == 'make'
