@@ -34,7 +34,7 @@ runs:
       elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
        #tools/bazel run --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user_dist
        tools/bazel build --nocheck_bzl_visibility --config=stamp --sandbox_debug --verbose_failures --debug_make_verbosity=I //projects/s5e8845:s5e8845_user
-     elif [[ ${{ inputs.kernel_verion }} == 6.* ]]; then
+     elif [[ ${{ inputs.kernel_version }} == 6.* ]]; then
       chmod +x build_kernel_GKI.sh
       ./build_kernel_GKI.sh || true
      elif [[ -d kernel_platform ]]; then
