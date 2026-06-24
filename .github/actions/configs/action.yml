@@ -29,45 +29,24 @@ runs:
   - name: nuke securities for root access
     shell: bash
     run: |
+     # 1. Determine which defconfig file needs to be patched based on the branch
+     target_config=""
+     
      if [[ "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" ]]; then
-     echo "nothing to see here moving on"
-          
-     elif [[ ${{ inputs.branch }} == SM-S926B* ]]; then
-     cat >> "$COMMON/arch/arm64/configs/s5e9945-bazel_defconfig" << 'EOF'
-     # nuke root protection
-     CONFIG_UH=n
-     CONFIG_UH_RKP=n
-     CONFIG_UH_LKMAUTH=n
-     CONFIG_UH_LKM_BLOCK=n
-     CONFIG_RKP_CFP_JOPP=n
-     CONFIG_RKP_CFP=n
-     CONFIG_SECURITY_DEFEX=n
-     CONFIG_PROCA=n
-     CONFIG_FIVE=n
-     CONFIG_RKP=n
-     CONFIG_KDP_NS=n
-     CONFIG_KDP=n
-     EOF
-
-     elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
-     cat >> "$COMMON/arch/arm64/configs/s5e8845-bazel_defconfig" << 'EOF'
-     # nuke root protection
-     CONFIG_UH=n
-     CONFIG_UH_RKP=n
-     CONFIG_UH_LKMAUTH=n
-     CONFIG_UH_LKM_BLOCK=n
-     CONFIG_RKP_CFP_JOPP=n
-     CONFIG_RKP_CFP=n
-     CONFIG_SECURITY_DEFEX=n
-     CONFIG_PROCA=n
-     CONFIG_FIVE=n
-     CONFIG_RKP=n
-     CONFIG_KDP_NS=n
-     CONFIG_KDP=n
-     EOF
-
+         echo "Nothing to see here, moving on..."
+     elif [[ "${{ inputs.branch }}" == SM-S926B* ]]; then
+         target_config="$COMMON/arch/arm64/configs/s5e9945-bazel_defconfig"
+     elif [[ "${{ inputs.branch }}" == SM-A556* ]]; then
+         target_config="$COMMON/arch/arm64/configs/s5e8845-bazel_defconfig"
      else
-     cat >> "$GKI_DEFCONFIG" << 'EOF'
+         target_config="$GKI_DEFCONFIG"
+     fi
+     
+     # 2. Apply the nuke modifications exactly once if a target file was assigned
+     if [ -n "$target_config" ]; then
+      echo "Nuking Samsung Knox/Root protection in: $target_config"
+         
+     cat >> "$target_config" << 'EOF'
      # nuke root protection
      CONFIG_UH=n
      CONFIG_UH_RKP=n
@@ -78,11 +57,12 @@ runs:
      CONFIG_SECURITY_DEFEX=n
      CONFIG_PROCA=n
      CONFIG_FIVE=n
-     CONFIG_RKP=n  
+     CONFIG_RKP=n
      CONFIG_KDP_NS=n
      CONFIG_KDP=n
      EOF
      fi
+
   - name: remove check_defconfig
     shell: bash
     run: |
