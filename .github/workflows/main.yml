@@ -95,7 +95,7 @@ jobs:
 
     env:
       GH_TOKEN: ${{ github.token }}
-      RELEASE_NAME: "Samsung GKI Kernels With KSUN v3.2.0 & SUSFS v2.1.0"
+      RELEASE_NAME: "Samsung GKI Kernels With KSUN v3.2.0 & SUSFS v2.2.0"
       RELEASE_BODY: ""
     steps:
       - name: Free Disk Space
@@ -156,7 +156,7 @@ jobs:
 
           if [ "${{ inputs.susfs }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
-          -> SUSFS ඞ v2.1.0
+          -> SUSFS ඞ v2.2.0
           -> SUSFS Inline hooks
           EOF
           fi
@@ -193,17 +193,19 @@ jobs:
 
           if [ "${{ inputs.bbr }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
-          -> bbrv1
+          -> TCP BBRV3 (better TCP congestion and faster internet)
           EOF
           fi
 
           cat <<'EOF' >> release_body.md
+          
           Notes:
           - The only modifications to Samsung Kernels at this time are KSUN and SUSFS. Everything else is left at default settings.
           - Currently no support for KernelPatch-Next/KPM for the time being.
           
           Module: 
           -> https://github.com/sidex15/ksu_module_susfs
+          -> https://github.com/rrr333nnn333/BRENE
       
           Manager:
           -> KSUN: https://github.com/KernelSU-Next/KernelSU-Next
