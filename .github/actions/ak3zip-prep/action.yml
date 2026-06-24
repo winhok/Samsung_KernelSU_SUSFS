@@ -26,7 +26,7 @@ runs:
      KERNEL_IMAGE=""
      priority_found=false
      fallback_images=()
-     search_roots=("." "kernel_platform/out" "kernel_platform/bazel-cache" "out")
+     search_roots=("." "kernel_platform/out" "out")
 
      # ==========================================
      # PHASE 1: DIRECT BAZEL DEPENDENCY QUERY (SMART)
