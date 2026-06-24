@@ -27,8 +27,34 @@ runs:
      priority_found=false
      fallback_images=()
 
-     # 2. Phase 1: Hunt inside priority folders first
-     for priority in *kbuild_mixed_tree "dist" "boot"; do
+     # ==========================================
+     # PHASE 1: DIRECT BAZEL DEPENDENCY QUERY (SMART)
+     # ==========================================
+     if [ -f "kernel_platform/tools/bazel" ]; then
+         echo "Bazel detected. Querying for target: //common:kernel_aarch64 ($target_name)..."
+         
+         # 1. Gather all files matching the target name into an array
+         mapfile -t cquery_outputs < <(tools/bazel cquery //common:kernel_aarch64 --output=files 2>/dev/null | grep -E "/${target_name}$")
+     
+         # 2. First Pass: Look strictly for your priority folder structures in the Bazel paths
+         for priority in *_kbuild_mixed_tree *.user "kernel_aarch64"; do
+             for path in "${cquery_outputs[@]}"; do
+                 # Use case-insensitive matching to verify if the path contains the priority folder name
+                 if [[ "${path,,}" == *"${priority,,}"* ]] && [ -f "$path" ]; then
+                     kernel_image="$path"
+                     priority_found=true
+                     echo "Match found via prioritized Bazel Graph lookup: $kernel_image"
+                     break 2
+                 fi
+             done
+         done
+     else
+         echo "No Bazel installation detected. Skipping Phase 1..."
+     fi
+
+
+     # 2. Phase 2: Hunt inside priority folders if build did not use bazel
+     for priority in "dist" "boot"; do
          for file in **/"$priority"/"$target_name"; do
              if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
                  KERNEL_IMAGE="$file"
@@ -38,7 +64,7 @@ runs:
          done
       done
 
-     # 3. Phase 2: If not in priority folders, gather ALL copies across the workspace
+     # 3. Phase 3: If not in priority folders, gather ALL copies across the workspace
      if [ "$priority_found" = false ]; then
          for file in **/"$target_name"; do
              if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
@@ -51,16 +77,19 @@ runs:
      shopt -u nocaseglob
      
      
-     # 4. Validation and Discovery Output Block
+     # ==========================================
+     # VALIDATION AND LOGGING OUTPUT
+     # ==========================================
      if [ "$priority_found" = true ]; then
-         echo "Successfully selected target from priority folder: $KERNEL_IMAGE"
-         echo "Copying to ak3 folder"
-         cp "$KERNEL_IMAGE" "$ANYKERNEL3/$target_name"
+         echo "========================================================"
+         echo "SUCCESS: Selected kernel binary path:"
+         echo "  -> $KERNEL_IMAGE"
+         echo "========================================================"
      else
-         echo "WARNING: Could not locate '$target_name' inside your specified priority folders!"
+         echo "WARNING: Could not locate '$target_name' inside specified priority targets!"
          
          if [ ${#fallback_images[@]} -eq 0 ]; then
-             echo "ERROR: The file was not found ANYWHERE else in the workspace either. Compilation likely failed."
+             echo "ERROR: The file was not found ANYWHERE in the workspace. Compilation likely failed."
              exit 1
          else
              echo "--------------------------------------------------------"
@@ -70,8 +99,8 @@ runs:
                  echo "  -> $fallback"
              done
              echo "--------------------------------------------------------"
-             echo "Action Required: Update your 'for priority in ...' statement with one of the parent folders above."
-             exit 1 # Halt the workflow so you can read the log output clearly
+             echo "Action Required: Update your script matching rules using a parent folder named above."
+             exit 1
          fi
      fi
 
