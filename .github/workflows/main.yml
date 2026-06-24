@@ -18,55 +18,55 @@ on:
         default: Actions
 
       ksun:
-        description: "Build with KSUN?"
+        description: "KSUN"
         required: false
         default: true
         type: boolean
 
       susfs:
-        description: "Build with SUSFS?"
+        description: "SUSFS"
         required: false
         type: boolean
         default: true
 
       bbg:
-        description: "Build with BBG?"
+        description: "BBG"
         required: false
         type: boolean
         default: true
 
       zeromount:
-        description: "Add Zeromount?"
+        description: "Zeromount"
         required: false
         type: boolean
         default: false
         
       unicodefix:
-        description: "Add unicode fix?"
+        description: "Unicode fix"
         required: false
         type: boolean
         default: true
 
       droidspace:
-        description: "add droidspace support?"
+        description: "Droidspaces"
         required: false
         type: boolean
         default: true
 
       ntsync:
-        description: "add ntsync?"
+        description: "NTsync"
         required: false
         type: boolean
         default: true
 
       bbr:
-        description: "Add bbrv1?"
+        description: "bbrv3"
         required: false
         type: boolean
         default: true
 
       cache:
-        description: "use cache?"
+        description: "CCache"
         required: false
         default: true
         type: boolean
