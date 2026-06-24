@@ -26,56 +26,51 @@ runs:
      KERNEL_IMAGE=""
      priority_found=false
      fallback_images=()
+     search_roots=("." "kernel_platform/out" "kernel_platform/bazel-cache" "out")
 
      # ==========================================
      # PHASE 1: DIRECT BAZEL DEPENDENCY QUERY (SMART)
      # ==========================================
-     if [[ -f "tools/bazel" || -f "kernel_platform/tools/bazel" ]]; then
-         echo "Bazel detected. Querying for target: //common:kernel_aarch64 ($target_name)..."
-         
-         # 1. Gather all files matching the target name into an array
-         mapfile -t cquery_outputs < <(tools/bazel cquery //common:kernel_aarch64 --output=files 2>/dev/null | grep -E "/${target_name}$")
-     
-         # 2. First Pass: Look strictly for your priority folder structures in the Bazel paths
-         for priority in *_kbuild_mixed_tree *.user "kernel_aarch64"; do
-             for path in "${cquery_outputs[@]}"; do
-                 # Use case-insensitive matching to verify if the path contains the priority folder name
-                 if [[ "${path,,}" == *"${priority,,}"* ]] && [ -f "$path" ]; then
-                     kernel_image="$path"
-                     priority_found=true
-                     echo "Match found via prioritized Bazel Graph lookup: $kernel_image"
-                     break 2
-                 fi
-             done
-         done
-     else
-         echo "No Bazel installation detected. Skipping Phase 1..."
-     fi
-
-
-     # 2. Phase 2: Hunt inside priority folders if build did not use bazel
-     for priority in "dist" "boot"; do
-         for file in **/"$priority"/"$target_name"; do
-             if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
-                 KERNEL_IMAGE="$file"
-                 priority_found=true
-                 break 2
-             fi
-         done
+     for priority in "kbuild_mixed_tree" "dist" "boot" "kernel_aarch64" ".user"; do
+      for root in "${search_roots[@]}"; do
+       if [ -d "$root" ]; then
+            
+        # Place the wildcard * directly in the path syntax so Bash expands it natively
+         for file in "$root"/**/*"$priority"/"$target_name"; do
+           if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
+               KERNEL_IMAGE="$file"
+               priority_found=true
+               break 3 # Lock in and break out of all three loops immediately
+           fi
+          done
+        fi
+       done
       done
 
-     # 3. Phase 3: If not in priority folders, gather ALL copies across the workspace
+
+     # ==========================================
+     # PHASE 3: DEEP WORKSPACE FALLBACK DISCOVERY
+     # ==========================================
      if [ "$priority_found" = false ]; then
-         for file in **/"$target_name"; do
-             if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
-                 fallback_images+=("$file")
+         echo "Priority folder target missing. Running complete disk scan..."
+         for root in "${search_roots[@]}"; do
+             if [ -d "$root" ]; then
+                 for file in "$root"/**/"$target_name"; do
+                     if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
+                         if [[ ! " ${fallback_images[*]} " =~ " ${file} " ]]; then
+                             fallback_images+=("$file")
+                         fi
+                    fi
+                 done
              fi
          done
          
+         if [ ${#fallback_images[@]} -gt 0 ]; then
+             KERNEL_IMAGE="${fallback_images[0]}"
+         fi
      fi
      
      shopt -u nocaseglob
-     
      
      # ==========================================
      # VALIDATION AND LOGGING OUTPUT
