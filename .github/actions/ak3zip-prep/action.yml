@@ -54,6 +54,8 @@ runs:
      # 4. Validation and Discovery Output Block
      if [ "$priority_found" = true ]; then
          echo "Successfully selected target from priority folder: $KERNEL_IMAGE"
+         echo "Copying to ak3 folder"
+         cp "$KERNEL_IMAGE" "$ANYKERNEL3/$target_name"
      else
          echo "WARNING: Could not locate '$target_name' inside your specified priority folders!"
          
