@@ -13,52 +13,112 @@ runs:
     shell: bash
     run: |
      cd "$CONFIG"
-
-     if [[ ${{ inputs.branch }} == SM-S928B* || ${{ inputs.branch }} == SM-S931* || ${{ inputs.branch }} == SM-F741* ]]; then
-      KERNEL_IMAGE=$(find kernel_platform/out -type f -path "*_kbuild_mixed_tree/Image" | head -n1)
-      echo "$KERNEL_IMAGE"
-      cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
-     elif [[ -f ./kernel_platform/bazel-bin/common/kernel_aarch64/Image ]]; then
-       cp ./kernel_platform/bazel-bin/common/kernel_aarch64/Image "$ANYKERNEL3/Image"
-     elif [[ -f ./bazel-bin/kernel/kernel_aarch64/Image ]]; then
-     cp ./bazel-bin/kernel/kernel_aarch64/Image "$ANYKERNEL3/Image"
-     elif [[ "${{ inputs.branch }}" == "SM-S928B-Oneui7" || "${{ inputs.branch }}" == "SM-S928B-Oneui8-bit4" || "${{ inputs.branch }}" == "SM-S928B-Oneui8-bit5" || "${{ inputs.branch }}" == "SM-F741B-Oneui8" ]]; then
-       cp ./kernel_platform/sec/dist/Image "$ANYKERNEL3/Image"
-     elif [[ "${{ inputs.branch }}" == "SM-S928B-Oneui6.1" ]]; then
-       cp ./out/msm-pineapple-pineapple-gki/dist/Image "$ANYKERNEL3/Image"
-     elif [[ "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" || "${{ inputs.branch }}" == "SM-M556B-Oneui8" ]]; then
-       cp ./kernel_platform/gki/dist/Image "$ANYKERNEL3/Image"
-     elif [[ "${{ inputs.branch }}" == "SM-X916B" || "${{ inputs.branch }}" == "SM-F946N-Oneui7" || "${{ inputs.branch }}" == "SM-F946B-Oneui8" || "${{ inputs.branch }}" == "SM-S916B-Oneui8" || "${{ inputs.branch }}" == "SM-S918B-Oneui8" || ${{ inputs.branch }} == SM-S911B* || "${{ inputs.branch }}" == "SM-X710-Oneui6.1.1" ]]; then
-       cp ./out/msm-kalama-kalama-gki/dist/Image "$ANYKERNEL3/Image"
-     elif [[ ${{ inputs.branch }} == SM-A546* || "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" || "${{ inputs.branch }}" == "SM-S908B-Oneui8-bitK" || "${{ inputs.branch }}" == "SM-X610-Oneui6.1.1-bit7" || "${{ inputs.branch }}" == "SM-A166B-Oneui7" ]]; then
-       cp ./arch/arm64/boot/Image "$ANYKERNEL3/Image"
-     elif [[ "${{ inputs.branch }}" == "SM-A566B" ]]; then
-       cp ./kernel-6.6/out/arch/arm64/boot/Image "$ANYKERNEL3/Image"
-     elif [[ ${{ inputs.branch }} == SM-S926B* ]]; then
-       #cp ./out/s5e9945_user/dist/Image "$ANYKERNEL3/Image"
-       KERNEL_IMAGE=$(find out -type f -name "Image" | head -n1)
-       echo "$KERNEL_IMAGE"
-       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
-     elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
-       #cp ./out/s5e8845_user/dist/Image "$ANYKERNEL3/Image"
-       KERNEL_IMAGE=$(find out -type f -name "Image" | head -n1)
-       echo "$KERNEL_IMAGE"
-       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
-     elif [[ "${{ inputs.branch }}" == "SM-S901E-Oneui8" || "${{ inputs.branch }}" == "SM-X800-Oneui8" ]]; then
-       cp ./out/msm-waipio-waipio-gki/dist/Image "$ANYKERNEL3/Image"
-     elif [[ ${{ inputs.branch }} == SM-A055* ]]; then
-       #cp ./out/target/product/a05m/obj/KLEAF_OBJ/dist/kernel_device_modules-6.6/mgk_64_k66_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
-       KERNEL_IMAGE=$(find out -type f -name "Image.gz" | head -n1)
-       echo "$KERNEL_IMAGE"
-       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image.gz"
-     elif [[ "${{ inputs.branch }}" == "SM-A075M-Oneui7" ]]; then
-       cp ./out/target/product/a07/obj/KERNEL_OBJ/kernel-5.10/arch/arm64/boot/Image.gz "$ANYKERNEL3/Image.gz"
-     elif [[ ${{ inputs.branch }} == SM-X926* ]]; then
-       #cp ./out/target/product/gts10u/obj/KLEAF_OBJ/dist/kernel_device_modules-6.1/mgk_64_k61_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
-       KERNEL_IMAGE=$(find out -type f -name "Image.gz" | head -n1)
-       echo "$KERNEL_IMAGE"
-       cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image.gz"
+     # 1. Determine target file name based on branch structure
+     if [[ "${{ inputs.branch }}" == SM-A055* || "${{ inputs.branch }}" == SM-X926* || "${{ inputs.branch }}" == "SM-A075M-Oneui7" ]]; then
+         target_name="Image.gz"
      else
-       echo "Error: Image file not found in any expected location"
-       exit 1
+         target_name="Image"
      fi
+     
+     shopt -s globstar
+     shopt -s nocaseglob
+
+     KERNEL_IMAGE=""
+     priority_found=false
+     fallback_images=()
+
+     # 2. Phase 1: Hunt inside priority folders first
+     for priority in *kbuild_mixed_tree "dist" "boot"; do
+         for file in **/"$priority"/"$target_name"; do
+             if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
+                 KERNEL_IMAGE="$file"
+                 priority_found=true
+                 break 2
+             fi
+         done
+      done
+
+     # 3. Phase 2: If not in priority folders, gather ALL copies across the workspace
+     if [ "$priority_found" = false ]; then
+         for file in **/"$target_name"; do
+             if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
+                 fallback_images+=("$file")
+             fi
+         done
+         
+     fi
+     
+     shopt -u nocaseglob
+     
+     
+     # 4. Validation and Discovery Output Block
+     if [ "$priority_found" = true ]; then
+         echo "Successfully selected target from priority folder: $KERNEL_IMAGE"
+     else
+         echo "WARNING: Could not locate '$target_name' inside your specified priority folders!"
+         
+         if [ ${#fallback_images[@]} -eq 0 ]; then
+             echo "ERROR: The file was not found ANYWHERE else in the workspace either. Compilation likely failed."
+             exit 1
+         else
+             echo "--------------------------------------------------------"
+             echo "DISCOVERY MODE: Found the following alternative locations:"
+             echo "--------------------------------------------------------"
+             for fallback in "${fallback_images[@]}"; do
+                 echo "  -> $fallback"
+             done
+             echo "--------------------------------------------------------"
+             echo "Action Required: Update your 'for priority in ...' statement with one of the parent folders above."
+             exit 1 # Halt the workflow so you can read the log output clearly
+         fi
+     fi
+
+
+     #if [[ ${{ inputs.branch }} == SM-S928B* || ${{ inputs.branch }} == SM-S931* || ${{ inputs.branch }} == SM-F741* ]]; then
+     # KERNEL_IMAGE=$(find kernel_platform/out -type f -path "*_kbuild_mixed_tree/Image" | head -n1)
+     # echo "$KERNEL_IMAGE"
+     # cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
+     #elif [[ -f ./kernel_platform/bazel-bin/common/kernel_aarch64/Image ]]; then
+     #  cp ./kernel_platform/bazel-bin/common/kernel_aarch64/Image "$ANYKERNEL3/Image"
+     #elif [[ -f ./bazel-bin/kernel/kernel_aarch64/Image ]]; then
+     #cp ./bazel-bin/kernel/kernel_aarch64/Image "$ANYKERNEL3/Image"
+     #elif [[ "${{ inputs.branch }}" == "SM-S928B-Oneui7" || "${{ inputs.branch }}" == "SM-S928B-Oneui8-bit4" || "${{ inputs.branch }}" == "SM-S928B-Oneui8-bit5" || "${{ inputs.branch }}" == "SM-F741B-Oneui8" ]]; then
+     #  cp ./kernel_platform/sec/dist/Image "$ANYKERNEL3/Image"
+     #elif [[ "${{ inputs.branch }}" == "SM-S928B-Oneui6.1" ]]; then
+     #  cp ./out/msm-pineapple-pineapple-gki/dist/Image "$ANYKERNEL3/Image"
+     #elif [[ "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" || "${{ inputs.branch }}" == "SM-M556B-Oneui8" ]]; then
+     #  cp ./kernel_platform/gki/dist/Image "$ANYKERNEL3/Image"
+     #elif [[ "${{ inputs.branch }}" == "SM-X916B" || "${{ inputs.branch }}" == "SM-F946N-Oneui7" || "${{ inputs.branch }}" == "SM-F946B-Oneui8" || "${{ inputs.branch }}" == "SM-S916B-Oneui8" || "${{ inputs.branch }}" == "SM-S918B-Oneui8" || ${{ inputs.branch }} == SM-S911B* || "${{ inputs.branch }}" == "SM-X710-Oneui6.1.1" ]]; then
+     #  cp ./out/msm-kalama-kalama-gki/dist/Image "$ANYKERNEL3/Image"
+     #elif [[ ${{ inputs.branch }} == SM-A546* || "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" || "${{ inputs.branch }}" == "SM-S908B-Oneui8-bitK" || "${{ inputs.branch }}" == "SM-X610-Oneui6.1.1-bit7" || "${{ inputs.branch }}" == "SM-A166B-Oneui7" ]]; then
+     #  cp ./arch/arm64/boot/Image "$ANYKERNEL3/Image"
+     #elif [[ "${{ inputs.branch }}" == "SM-A566B" ]]; then
+     #  cp ./kernel-6.6/out/arch/arm64/boot/Image "$ANYKERNEL3/Image"
+     #elif [[ ${{ inputs.branch }} == SM-S926B* ]]; then
+     #  #cp ./out/s5e9945_user/dist/Image "$ANYKERNEL3/Image"
+     #  KERNEL_IMAGE=$(find out -type f -name "Image" | head -n1)
+     #  echo "$KERNEL_IMAGE"
+     #  cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
+     #elif [[ ${{ inputs.branch }} == SM-A556* ]]; then
+     #  #cp ./out/s5e8845_user/dist/Image "$ANYKERNEL3/Image"
+     #  KERNEL_IMAGE=$(find out -type f -name "Image" | head -n1)
+     #  echo "$KERNEL_IMAGE"
+     #  cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image"
+     #elif [[ "${{ inputs.branch }}" == "SM-S901E-Oneui8" || "${{ inputs.branch }}" == "SM-X800-Oneui8" ]]; then
+     #  cp ./out/msm-waipio-waipio-gki/dist/Image "$ANYKERNEL3/Image"
+     #elif [[ ${{ inputs.branch }} == SM-A055* ]]; then
+     #  #cp ./out/target/product/a05m/obj/KLEAF_OBJ/dist/kernel_device_modules-6.6/mgk_64_k66_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
+     #  KERNEL_IMAGE=$(find out -type f -name "Image.gz" | head -n1)
+     #  echo "$KERNEL_IMAGE"
+     #  cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image.gz"
+     #elif [[ "${{ inputs.branch }}" == "SM-A075M-Oneui7" ]]; then
+     #  cp ./out/target/product/a07/obj/KERNEL_OBJ/kernel-5.10/arch/arm64/boot/Image.gz "$ANYKERNEL3/Image.gz"
+     #elif [[ ${{ inputs.branch }} == SM-X926* ]]; then
+     #  #cp ./out/target/product/gts10u/obj/KLEAF_OBJ/dist/kernel_device_modules-6.1/mgk_64_k61_kernel_aarch64.user/Image.gz "$ANYKERNEL3/Image.gz"
+     #  KERNEL_IMAGE=$(find out -type f -name "Image.gz" | head -n1)
+     #  echo "$KERNEL_IMAGE"
+     #  cp "$KERNEL_IMAGE" "$ANYKERNEL3/Image.gz"
+     #else
+     #  echo "Error: Image file not found in any expected location"
+     #  exit 1
+     #fi
