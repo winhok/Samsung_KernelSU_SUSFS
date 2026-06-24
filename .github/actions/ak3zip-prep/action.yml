@@ -30,7 +30,7 @@ runs:
      # ==========================================
      # PHASE 1: DIRECT BAZEL DEPENDENCY QUERY (SMART)
      # ==========================================
-     if [ -f "kernel_platform/tools/bazel" ]; then
+     if [[ -f "tools/bazel" || -f "kernel_platform/tools/bazel" ]]; then
          echo "Bazel detected. Querying for target: //common:kernel_aarch64 ($target_name)..."
          
          # 1. Gather all files matching the target name into an array
