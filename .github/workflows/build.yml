@@ -222,9 +222,12 @@ jobs:
         with:
          branch: ${{ inputs.branch }}
 
-      - name: Add bbrv1
+      - name: Add bbrv3
         if: inputs.bbr == 'true'
         uses: ./.github/actions/bbr
+        with:
+          android_version: ${{ inputs.android_version }}
+          kernel_version: ${{ inputs.kernel_version }}
 
       - name: Add BBG
         if: inputs.bbg == 'true'
