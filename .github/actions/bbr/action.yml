@@ -1,19 +1,34 @@
-name: add bbrv1
-description: enable configs to add bbrv1 to kernel
+name: add bbrv3
+description: enable configs to add bbrv3 to kernel
+inputs:
+ kernel_version:
+  description: 'version of kernel'
+  required: true
+ android_version:
+  description: 'android version of kernel'
+  required: true
 
 runs:
  using: composite
  steps:
+  - name: apply bbrv3 patch
+    shell: bash
+    run: |
+     cd "$COMMON"
+     patch -p1 < "$KERNEL_PATCHES/common/bbrv3/0001-net-tcp-backport-BBRv3-to-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch"
+     
   - name: add bbr configs to defconfig
     shell: bash
     run: |
      cat >> "$GKI_DEFCONFIG" << 'EOF'
-     # Add bbrv1
+     # Add bbrv3
      CONFIG_NET_SCH_FQ=y
+     CONFIG_NET_SCH_CAKE=y
      CONFIG_TCP_CONG_ADVANCED=y
      CONFIG_TCP_CONG_BBR=y
+     CONFIG_TCP_CONG_BBR3=y
      CONFIG_TCP_CONG_CUBIC=y
-     CONFIG_DEFAULT_BBR=y
+     CONFIG_DEFAULT_BBR3=y
      # CONFIG_TCP_CONG_BIC is not set
      # CONFIG_TCP_CONG_WESTWOOD is not set
      # CONFIG_TCP_CONG_HTCP is not set
