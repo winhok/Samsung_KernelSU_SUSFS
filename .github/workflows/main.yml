@@ -71,6 +71,18 @@ on:
         default: true
         type: boolean
 
+      ipv6_nat:
+       description: "IPv6_NAT & IP-SET"
+       required: false
+       default: false
+       type: boolean
+
+      optimization:
+       description: "optimization patches"
+       required: false
+       default: false
+       type: boolean
+
 jobs:
 
   build-samsung:
@@ -86,6 +98,8 @@ jobs:
       ntsync: ${{ inputs.ntsync }}
       bbr: ${{ inputs.bbr }}
       cache: ${{ inputs.cache }}
+      ipv6_nat: ${{ inputs.ipv6_nat }}
+      optimization: ${{ inputs.optimization }}
 
   release:
     runs-on: ubuntu-latest
