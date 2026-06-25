@@ -31,5 +31,6 @@ runs:
      CONFIG_IP6_NF_NAT=y
      CONFIG_IP6_NF_TARGET_MASQUERADE=y
      EOF
-       
+
+     cd "$COMMON"
      patch -p1 -F 3 < "$KERNEL_PATCHES_FOLDER/common/IPv6_NAT_FIX.patch"
