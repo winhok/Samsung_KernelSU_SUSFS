@@ -34,6 +34,12 @@ on:
       cache:
         required: true
         type: string
+      ipv6_nat:
+        required: true
+        type: string
+      optimization:
+        required: true
+        type: string
 
 jobs:
   build-kernels-a12:
@@ -232,4 +238,6 @@ jobs:
       ntsync: ${{ inputs.ntsync }}
       bbr: ${{ inputs.bbr }}
       cache: ${{ inputs.cache }}
+      ipv6_nat: ${{ inputs.ipv6_nat }}
+      optimization: ${{ inputs.optimization }}
 
