@@ -45,6 +45,12 @@ on:
       cache:
         required: true
         type: string
+      ipv6_nat:
+        required: true
+        type: string
+      optimization:
+        required: true
+        type: string
 
 jobs:
   build-samsung-gki:
@@ -216,26 +222,9 @@ jobs:
           android_version: ${{ inputs.android_version }}
           kernel_version: ${{ inputs.kernel_version }}
 
-      - name: Fix WiFi and Bluetooth on Samsung 6.6 GKI devices
-        if: inputs.kernel_version == '6.6'
-        uses: ./.github/actions/6.6-fix
-        with:
-         branch: ${{ inputs.branch }}
-
-      - name: Add bbrv3
-        if: inputs.bbr == 'true'
-        uses: ./.github/actions/bbr
-        with:
-          android_version: ${{ inputs.android_version }}
-          kernel_version: ${{ inputs.kernel_version }}
-
       - name: Add BBG
         if: inputs.bbg == 'true'
         uses: ./.github/actions/bbg
-
-      - name: temp fix for m55 bootloop maybe
-        if: inputs.branch == 'SM-M556B-Oneui8'
-        uses: ./.github/actions/m55-fix
 
       - name: Add unicodefix
         if: inputs.unicodefix == 'true'
@@ -255,7 +244,32 @@ jobs:
         with:
           android_version: ${{ inputs.android_version }}
           kernel_version: ${{ inputs.kernel_version }}
-          
+
+      - name: Add bbrv3
+        if: inputs.bbr == 'true'
+        uses: ./.github/actions/bbr
+        with:
+          android_version: ${{ inputs.android_version }}
+          kernel_version: ${{ inputs.kernel_version }}
+
+      - name: Add IP-SET and IPv6_NAT support
+        if: inputs.ipv6_nat == 'true'
+        uses: ./.github/actions/IPv6_NAT
+
+      - name: add optimization patches
+        if: inputs.optimization == 'true'
+        uses: ./.github/actions/optimization
+
+      - name: Fix WiFi and Bluetooth on Samsung 6.6 GKI devices
+        if: inputs.kernel_version == '6.6'
+        uses: ./.github/actions/6.6-fix
+        with:
+         branch: ${{ inputs.branch }}
+
+      - name: temp fix for m55 bootloop maybe
+        if: inputs.branch == 'SM-M556B-Oneui8'
+        uses: ./.github/actions/m55-fix
+
       - name: Set Kernel Configuration Variables
         if: inputs.ksun == 'true'
         uses: ./.github/actions/configs
