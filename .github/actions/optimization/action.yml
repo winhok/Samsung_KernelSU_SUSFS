@@ -4,6 +4,9 @@ inputs:
   kernel_version:
     description: 'Kernel version'
     required: true
+  branch:
+    description: 'device branch'
+    required: true
 
 runs:
  using: composite
