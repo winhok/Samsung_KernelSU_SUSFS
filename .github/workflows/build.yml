@@ -259,6 +259,8 @@ jobs:
       - name: add optimization patches
         if: inputs.optimization == 'true'
         uses: ./.github/actions/optimization
+        with:
+         kernel_version: ${{ inputs.kernel_version }}
 
       - name: Fix WiFi and Bluetooth on Samsung 6.6 GKI devices
         if: inputs.kernel_version == '6.6'
