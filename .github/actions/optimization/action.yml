@@ -57,4 +57,4 @@ runs:
      patch -p1 < "$KERNEL_PATCHES/common/reduce_pci_pme_wakeups.patch"
      patch -p1 < "$KERNEL_PATCHES/common/silence_irq_cpu_logspam.patch"
      patch -p1 < "$KERNEL_PATCHES/common/silence_system_logspam.patch"
-     patch -p1 < "$KERNEL_PATCHES/common/use_unlikely_wrap_cpufreq.patch"
+     patch -p1 -F 3 < "$KERNEL_PATCHES/common/use_unlikely_wrap_cpufreq.patch"
