@@ -38,7 +38,7 @@ runs:
      patch -p1 < "$KERNEL_PATCHES/common/increase_sk_mem_packets.patch"
      patch -p1 < "$KERNEL_PATCHES/common/int_sqrt.patch"
      patch -p1 < "$KERNEL_PATCHES/common/mem_opt_prefetch.patch"
-     patch -p1 < "$KERNEL_PATCHES/common/minimise_wakeup_time.patch"
+     patch -p1 -F 3 < "$KERNEL_PATCHES/common/minimise_wakeup_time.patch"
 
      #test for organizing
      if [ "$(printf '%s\n' "${{ inputs.kernel_version }}" "$MIN_VERSION" | sort -V | tail -n1)" = "${{ inputs.kernel_version }}" ]; then
