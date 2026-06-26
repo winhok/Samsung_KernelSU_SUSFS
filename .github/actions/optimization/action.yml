@@ -27,7 +27,7 @@ runs:
        echo "Optimised memcmp patch not found!"
      fi
 
-     #patch -p1 --forward < "$KERNEL_PATCHES/common/minimise_wakeup_time.patch"
+     patch -p1 --forward < "$KERNEL_PATCHES/common/Samsung/minimise_wakeup_time_samsung.patch"
      patch -p1 --forward < "$KERNEL_PATCHES/common/int_sqrt.patch"
      patch -p1 --forward < "$KERNEL_PATCHES/common/force_tcp_nodelay.patch"
      patch -p1 --forward < "$KERNEL_PATCHES/common/reduce_gc_thread_sleep_time.patch"
@@ -47,8 +47,12 @@ runs:
      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/re_write_limitation_scaling_min_freq.patch"
      echo "Patching adjust_cpu_scan_order.patch"
      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/adjust_cpu_scan_order.patch"
-     echo "skipping avoid_extra_s2idle_wake_attempts.patch, doesn't work with oneui 8.5"
-     #patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/avoid_extra_s2idle_wake_attempts.patch"
+     echo "patching void_extra_s2idle_wake_attempts.patch"
+     if [[ "${{ inputs.branch }}" == "SM-S928B-Oneui8.5" || "${{ inputs.branch }}" == "SM-S926B-Oneui8.5" ]]; then
+      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/Samsung/avoid_extra_s2idle_wake_attempts_oneui8.5.patch"
+     else
+      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/avoid_extra_s2idle_wake_attempts.patch"
+     fi
      echo "Patching disable_cache_hot_buddy.patch"
      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/disable_cache_hot_buddy.patch"
      echo "Patching f2fs_enlarge_min_fsync_blocks.patch"
