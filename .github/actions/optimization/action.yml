@@ -17,7 +17,7 @@ runs:
      # CAUSES COMPILE ERROR-p1 -F 3 < "$KERNEL_PATCHES/common/add_limitation_scaling_min_freq.patch"
      # PATCH FAILS ON ONEUI 8.5patch -p1 -F 3 < "$KERNEL_PATCHES/common/avoid_extra_s2idle_wake_attempts.patch"
      #patch fails on all hunks for all devices patch -p1 -F 3 < "$KERNEL_PATCHES/common/re_write_limitation_scaling_min_freq.patch"
-     
+     #patch fails for all devices patch -p1 -F 3 < "$KERNEL_PATCHES/common/use_unlikely_wrap_cpufreq.patch"
 
      #good patches that work
      patch -p1 < "$KERNEL_PATCHES/common/add_timeout_wakelocks_globally.patch"
@@ -57,4 +57,4 @@ runs:
      patch -p1 < "$KERNEL_PATCHES/common/reduce_pci_pme_wakeups.patch"
      patch -p1 < "$KERNEL_PATCHES/common/silence_irq_cpu_logspam.patch"
      patch -p1 < "$KERNEL_PATCHES/common/silence_system_logspam.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/use_unlikely_wrap_cpufreq.patch"
+     
