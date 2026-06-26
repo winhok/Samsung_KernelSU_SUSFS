@@ -261,6 +261,7 @@ jobs:
         uses: ./.github/actions/optimization
         with:
          kernel_version: ${{ inputs.kernel_version }}
+         branch: ${{ inputs.branch }}
 
       - name: Fix WiFi and Bluetooth on Samsung 6.6 GKI devices
         if: inputs.kernel_version == '6.6'
