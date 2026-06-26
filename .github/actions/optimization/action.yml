@@ -64,4 +64,4 @@ runs:
      echo "Patching silence_system_logspam.patch"
      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/silence_system_logspam.patch"
      echo "Patching use_unlikely_wrap_cpufreq.patch"
-     patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/use_unlikely_wrap_cpufreq.patch"
+     #patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/use_unlikely_wrap_cpufreq.patch"
