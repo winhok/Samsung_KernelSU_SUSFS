@@ -14,9 +14,11 @@ runs:
      cd "$COMMON"
      MIN_VERSION="5.16"
 
-     # CAUSES COMPILE ERROR-p1 -F 3 < "$KERNEL_PATCHES/common/add_limitation_scaling_min_freq.patch"
+     # trying with rewrite
+     patch -p1 -F 3 < "$KERNEL_PATCHES/common/add_limitation_scaling_min_freq.patch"
      # PATCH FAILS ON ONEUI 8.5patch -p1 -F 3 < "$KERNEL_PATCHES/common/avoid_extra_s2idle_wake_attempts.patch"
-     #patch fails on all hunks for all devices patch -p1 -F 3 < "$KERNEL_PATCHES/common/re_write_limitation_scaling_min_freq.patch"
+     #patch fails on all hunks for all devices trying with rewrite
+     patch -p1 -F 3 < "$KERNEL_PATCHES/common/re_write_limitation_scaling_min_freq.patch"
      #patch fails for all devices patch -p1 -F 3 < "$KERNEL_PATCHES/common/use_unlikely_wrap_cpufreq.patch"
 
      #good patches that work
