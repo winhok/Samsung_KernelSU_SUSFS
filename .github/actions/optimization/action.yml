@@ -1,5 +1,9 @@
 name: add kernel optimizations
 description: apply patches from kernel patches repo for kernel optimization
+inputs:
+  kernel_version:
+    description: 'Kernel version'
+    required: true
 
 runs:
  using: composite
@@ -8,31 +12,37 @@ runs:
     shell: bash
     run: |
      cd "$COMMON"
+     MIN_VERSION="5.16"
 
      # CAUSES COMPILE ERROR-p1 -F 3 < "$KERNEL_PATCHES/common/add_limitation_scaling_min_freq.patch"
      # PATCH FAILS ON ONEUI 8.5patch -p1 -F 3 < "$KERNEL_PATCHES/common/avoid_extra_s2idle_wake_attempts.patch"
      
 
      #good patches that work
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/add_timeout_wakelocks_globally.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/adjust_cpu_scan_order.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/clear_page_16bytes_align.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/disable_cache_hot_buddy.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/f2fs_enlarge_min_fsync_blocks.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/f2fs_reduce_congestion.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/file_struct_8bytes_align.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/force_tcp_nodelay.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/increase_ext4_default_commit_age.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/increase_sk_mem_packets.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/int_sqrt.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/mem_opt_prefetch.patch"
-     patch -p1 -F 3 < "$KERNEL_PATCHES/common/minimise_wakeup_time.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/add_timeout_wakelocks_globally.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/adjust_cpu_scan_order.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/clear_page_16bytes_align.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/disable_cache_hot_buddy.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/f2fs_enlarge_min_fsync_blocks.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/f2fs_reduce_congestion.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/file_struct_8bytes_align.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/force_tcp_nodelay.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/increase_ext4_default_commit_age.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/increase_sk_mem_packets.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/int_sqrt.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/mem_opt_prefetch.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/minimise_wakeup_time.patch"
 
      #test for organizing
-     if [ "$(printf '%s\n' "$KERNEL_VERSION" "$MIN_VERSION" | sort -V | tail -n1)" = "$KERNEL_VERSION" ]; then
-          patch -p1 --forward < "$KERNEL_PATCHES_FOLDER/common/optimise_memcmp.patch"
-     elif [ "$(printf '%s\n' "$KERNEL_VERSION" "5.11" | sort -V | tail -n1)" = "$KERNEL_VERSION" ]; then
-          sed -e 's/SYM_FUNC_START(__pi_memcmp)/SYM_FUNC_START_WEAK_PI(memcmp)/' -e 's/SYM_FUNC_END(__pi_memcmp)/SYM_FUNC_END_PI(memcmp)/' -e 's/SYM_FUNC_ALIAS_WEAK(memcmp, __pi_memcmp)/EXPORT_SYMBOL_NOKASAN(memcmp)/' "$KERNEL_PATCHES_FOLDER/common/optimise_memcmp.patch" | patch -p1 --forward
+     if [ "$(printf '%s\n' "${{ inputs.kernel_version }}" "$MIN_VERSION" | sort -V | tail -n1)" = "${{ inputs.kernel_version }}" ]; then
+          patch -p1 -F 3 < "$KERNEL_PATCHES/common/optimise_memcmp.patch"
+     elif [ "$(printf '%s\n' "${{ inputs.kernel_version }}" "5.11" | sort -V | tail -n1)" = "${{ inputs.kernel_version }}" ]; then
+          sed -e 's/SYM_FUNC_START(__pi_memcmp)/SYM_FUNC_START_WEAK_PI(memcmp)/' -e 's/SYM_FUNC_END(__pi_memcmp)/SYM_FUNC_END_PI(memcmp)/' -e 's/SYM_FUNC_ALIAS_WEAK(memcmp, __pi_memcmp)/EXPORT_SYMBOL_NOKASAN(memcmp)/' "$KERNEL_PATCHES/common/optimise_memcmp.patch" | patch -p1 --forward
      else
           echo "Optimised memcmp patch not found!"
      fi
+     patch -p1 < "$KERNEL_PATCHES/common/optimized_mem_operations.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/re_write_limitation_scaling_min_freq.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/reduce_cache_pressure.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/reduce_freeze_timeout.patch"
+     patch -p1 < "$KERNEL_PATCHES/common/reduce_gc_thread_sleep_time.patch"
