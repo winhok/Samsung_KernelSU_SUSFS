@@ -40,6 +40,7 @@ runs:
            if [ -f "$file" ] && [[ "$file" != *".git"* ]]; then
                KERNEL_IMAGE="$file"
                priority_found=true
+               cp "$KERNEL_IMAGE" "$ANYKERNEL3/$target_name"
                break 3 # Lock in and break out of all three loops immediately
            fi
           done
