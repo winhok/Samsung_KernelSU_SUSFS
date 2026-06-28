@@ -51,7 +51,7 @@ runs:
      echo "Patching adjust_cpu_scan_order.patch"
      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/adjust_cpu_scan_order.patch"
      echo "patching void_extra_s2idle_wake_attempts.patch"
-     if [[ "${{ inputs.branch }}" == "SM-S928B-Oneui8.5" || "${{ inputs.branch }}" == "SM-S926B-Oneui8.5" ]]; then
+     if [[ "${{ inputs.branch }}" == "SM-S928B-Oneui8.5" || "${{ inputs.branch }}" == "SM-S926B-Oneui8.5" || "${{ inputs.branch }}" == "SM-S938B-Oneui8.5" ]]; then
       patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/Samsung/avoid_extra_s2idle_wake_attempts_oneui8.5.patch"
      else
       patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/avoid_extra_s2idle_wake_attempts.patch"
