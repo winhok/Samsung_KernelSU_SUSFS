@@ -51,6 +51,9 @@ on:
       optimization:
         required: true
         type: string
+      ttl:
+        required: true
+        type: string
 
 jobs:
   build-samsung-gki:
@@ -255,6 +258,10 @@ jobs:
       - name: Add IP-SET and IPv6_NAT support
         if: inputs.ipv6_nat == 'true'
         uses: ./.github/actions/IPv6_NAT
+
+      - name: Add TTL support
+        if: inputs.ttl == 'true'
+        uses: ./.github/actions/TTL
 
       - name: add optimization patches
         if: inputs.optimization == 'true'
