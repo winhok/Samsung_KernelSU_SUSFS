@@ -56,6 +56,7 @@ For GKI installation, please follow the official guide:
 - 🖧 **BBRv3**: Improved TCP congestion control and faster internet
 - 🚀 **Optimisation patches**: Memory, I/O, CPU scheduler, network and other general tunings
 - 🧱 **IP Set & IPv6 NAT Support**: Advanced firewall capabilities and IPv6 NAT Support
+- 🌐 **TTL Target Support**: Network packet manipulation
 - ✅ **LTO**: Link Time Optimisation enabled
 - ⚡️ **TMPFS XATTR / POSIX ACL**: Extended TMPFS support for meta modules and Mountify
 - </> **Unicode Bypass Fix**: Prevent path traversal and other detections using non-printable Unicode codepoints [Experimental]
