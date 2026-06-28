@@ -52,7 +52,10 @@ For GKI installation, please follow the official guide:
 - 🔐 **KernelSU**: A root solution for Android GKI devices that works in kernel mode and grants root permission to userspace applications directly in kernel space
 - 🥷 **SUSFS**: An addon root hiding kernel patches and userspace module for KernelSU
 - 🛡️ **BBG**: LSM-based Baseband Guard security to protect critical device partitions
+- 🖧 **BBRv1**: Improved TCP congestion control
 - 🖧 **BBRv3**: Improved TCP congestion control and faster internet
+- 🚀 **Optimisation patches**: Memory, I/O, CPU scheduler, network and other general tunings
+- 🧱 **IP Set & IPv6 NAT Support**: Advanced firewall capabilities and IPv6 NAT Support
 - ✅ **LTO**: Link Time Optimisation enabled
 - ⚡️ **TMPFS XATTR / POSIX ACL**: Extended TMPFS support for meta modules and Mountify
 - </> **Unicode Bypass Fix**: Prevent path traversal and other detections using non-printable Unicode codepoints [Experimental]
