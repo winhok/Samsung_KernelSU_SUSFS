@@ -23,12 +23,16 @@ runs:
      cat >> "$GKI_DEFCONFIG" << 'EOF'
      # Add bbrv3
      CONFIG_NET_SCH_FQ=y
+     CONFIG_NET_SCH_FQ_CODEL=y
      CONFIG_NET_SCH_CAKE=y
+     CONFIG_NET_SCH_PIE=y
+     CONFIG_NET_SCH_FQ_PIE=y
      CONFIG_TCP_CONG_ADVANCED=y
      CONFIG_TCP_CONG_BBR=y
      CONFIG_TCP_CONG_BBR3=y
      CONFIG_TCP_CONG_CUBIC=y
      CONFIG_DEFAULT_BBR3=y
+     
      # CONFIG_TCP_CONG_BIC is not set
      # CONFIG_TCP_CONG_WESTWOOD is not set
      # CONFIG_TCP_CONG_HTCP is not set
