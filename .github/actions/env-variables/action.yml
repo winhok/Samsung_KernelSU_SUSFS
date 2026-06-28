@@ -54,9 +54,9 @@ runs:
   - name: set defconfig variable
     shell: bash
     run: |
-     if [[ "${{ inputs.branch }}" == "SM-A546B-Oneui7" || "${{ inputs.branch }}" == "SM-A546B-Oneui8" ]]; then
+     if [[ ${{ inputs.branch }} == SM-A546B* ]]; then
        GKI_DEFCONFIG="$COMMON/arch/arm64/configs/s5e8835-a54xnaxx_defconfig"
-     elif [[ "${{ inputs.branch }}" == "SM-A546E-Oneui7" || "${{ inputs.branch }}" == "SM-A546E-Oneui8" ]]; then
+     elif [[ ${{ inputs.branch }} == SM-A546E* ]]; then
        GKI_DEFCONFIG="$COMMON/arch/arm64/configs/s5e8835-a54xnsxx_defconfig"
      elif [[ "${{ inputs.branch }}" == "SM-M146B-Oneui7-ADYJ2" ]]; then
        GKI_DEFCONFIG="$COMMON/arch/arm64/configs/s5e8535-m14xnsxx_defconfig"
