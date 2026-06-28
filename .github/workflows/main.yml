@@ -177,13 +177,13 @@ jobs:
 
           if [ "${{ inputs.bbg }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
-          -> BBG: https://github.com/vc-teahouse/Baseband-guard
+          -> BBG - https://github.com/vc-teahouse/Baseband-guard
           EOF
           fi
 
           if [ "${{ inputs.unicodefix }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
-          -> unicode fix
+          -> unicode fix - Prevent path traversal and other detections using non-printable Unicode codepoints
           EOF
           fi
 
@@ -201,13 +201,26 @@ jobs:
 
           if [ "${{ inputs.ntsync }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
-          -> ntsync
+          -> NTSync - Provide high-performance, low-latency synchronization primitives compatible with the Windows NT kernel API
           EOF
           fi
 
           if [ "${{ inputs.bbr }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
           -> TCP BBRV3 (better TCP congestion and faster internet)
+          -> CAKE and PIE qdisc Support - Better Net Schedulers
+          EOF
+          fi
+
+          if [ "${{ inputs.ipv6_nat }}" = "true" ]; then
+          cat <<'EOF' >> release_body.md
+          -> IP Set & IPv6 NAT Support - Advanced firewall capabilities and IPv6 NAT Support
+          EOF
+          fi
+
+          if [ "${{ inputs.optimization }}" = "true" ]; then
+          cat <<'EOF' >> release_body.md
+          -> Kernel Optimization - Memory, I/O, CPU scheduler, network and other general tunings
           EOF
           fi
 
