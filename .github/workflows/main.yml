@@ -74,13 +74,19 @@ on:
       ipv6_nat:
        description: "IPv6_NAT & IP-SET"
        required: false
-       default: false
+       default: true
        type: boolean
 
       optimization:
        description: "optimization patches"
        required: false
-       default: false
+       default: true
+       type: boolean
+
+      ttl:
+       description: "TTL support"
+       required: false
+       default: true
        type: boolean
 
 jobs:
@@ -100,6 +106,7 @@ jobs:
       cache: ${{ inputs.cache }}
       ipv6_nat: ${{ inputs.ipv6_nat }}
       optimization: ${{ inputs.optimization }}
+      ttl: ${{ inputs.ttl }}
 
   release:
     runs-on: ubuntu-latest
@@ -189,13 +196,13 @@ jobs:
 
           if [ "${{ inputs.zeromount }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
-          -> Zeromount https://github.com/Enginex0/zeromount
+          -> Zeromount - https://github.com/Enginex0/zeromount
           EOF
           fi
 
           if [ "${{ inputs.droidspace }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
-          -> droidspaces support https://github.com/ravindu644/Droidspaces-OSS
+          -> droidspaces support - https://github.com/ravindu644/Droidspaces-OSS
           EOF
           fi
 
@@ -215,6 +222,12 @@ jobs:
           if [ "${{ inputs.ipv6_nat }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
           -> IP Set & IPv6 NAT Support - Advanced firewall capabilities and IPv6 NAT Support
+          EOF
+          fi
+
+          if [ "${{ inputs.ttl }}" = "true" ]; then
+          cat <<'EOF' >> release_body.md
+          -> TTL Target Support - Network packet manipulation
           EOF
           fi
 
