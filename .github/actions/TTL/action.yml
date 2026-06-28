@@ -1,0 +1,14 @@
+name: add TTL support
+description: same as above
+
+runs:
+ using: composite
+ steps:
+  - name: apply ttl support
+    shell: bash
+    run: |
+     cat >> "$GKI_DEFCONFIG" <<EOF
+     CONFIG_IP_NF_TARGET_TTL=y
+     CONFIG_IP6_NF_TARGET_HL=y
+     CONFIG_IP6_NF_MATCH_HL=y
+     EOF
