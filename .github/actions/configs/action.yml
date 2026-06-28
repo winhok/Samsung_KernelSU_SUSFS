@@ -32,7 +32,7 @@ runs:
      # 1. Determine which defconfig file needs to be patched based on the branch
      target_config=""
      
-     if [[ "${{ inputs.branch }}" == "SM-S938B-Oneui7" || "${{ inputs.branch }}" == "SM-S931B-Oneui8" ]]; then
+     if [[ ${{ inputs.branch }} == SM-S938B* || "${{ inputs.branch }}" == "SM-S931B-Oneui8" ]]; then
          echo "Nothing to see here, moving on..."
      elif [[ "${{ inputs.branch }}" == SM-S926B* ]]; then
          target_config="$COMMON/arch/arm64/configs/s5e9945-bazel_defconfig"
