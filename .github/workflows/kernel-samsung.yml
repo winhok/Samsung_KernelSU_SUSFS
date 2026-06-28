@@ -40,6 +40,9 @@ on:
       optimization:
         required: true
         type: string
+      ttl:
+        required: true
+        type: string
 
 jobs:
   build-kernels-a12:
@@ -248,4 +251,5 @@ jobs:
       cache: ${{ inputs.cache }}
       ipv6_nat: ${{ inputs.ipv6_nat }}
       optimization: ${{ inputs.optimization }}
+      ttl: ${{ inputs.ttl }}
 
