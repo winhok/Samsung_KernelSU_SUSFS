@@ -33,4 +33,4 @@ runs:
      EOF
 
      cd "$COMMON"
-     patch -p1 -F 3 < "$KERNEL_PATCHES_FOLDER/common/IPv6_NAT_FIX.patch"
+     patch -p1 -F 3 < "$KERNEL_PATCHES/common/IPv6_NAT_FIX.patch"
