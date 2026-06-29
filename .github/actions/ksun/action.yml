@@ -64,10 +64,13 @@ runs:
       shell: bash
       run: |
         cd "$COMMON/KernelSU-Next"
-        # Extract and export KSU version info
-        KSU_GIT_VERSION=$(git rev-list --count HEAD 2>/dev/null)
-        KSU_GIT_TAG=$(git describe --tags --abbrev=0 2>/dev/null)
-        KSU_COMMIT=$(git rev-parse --short HEAD 2>/dev/null)
+        # Fetch dev branch for version info (tags, commits, etc.)
+        git fetch --depth=50 origin dev 2>/dev/null || true
+        
+        # Extract and export KSU version info from dev branch
+        KSU_GIT_VERSION=$(git rev-list --count origin/dev 2>/dev/null)
+        KSU_GIT_TAG=$(git describe --tags --abbrev=0 origin/dev 2>/dev/null || echo "")
+        KSU_COMMIT=$(git rev-parse --short origin/dev 2>/dev/null)
         KSU_VERSION=$((30000 + KSU_GIT_VERSION))
         
         echo "KSU_GIT_TAG=$KSU_GIT_TAG" >> $GITHUB_ENV
