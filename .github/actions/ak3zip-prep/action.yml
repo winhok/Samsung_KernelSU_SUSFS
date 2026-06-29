@@ -31,7 +31,7 @@ runs:
      # ==========================================
      # PHASE 1: DIRECT BAZEL DEPENDENCY QUERY (SMART)
      # ==========================================
-     for priority in "kbuild_mixed_tree" "dist" "boot" "kernel_aarch64" ".user"; do
+     for priority in "kbuild_mixed_tree" "dist" "kernel_aarch64" ".user" "_user" "boot"; do
       for root in "${search_roots[@]}"; do
        if [ -d "$root" ]; then
             
