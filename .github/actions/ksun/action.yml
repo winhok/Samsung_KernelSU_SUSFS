@@ -69,9 +69,9 @@ runs:
         git fetch origin dev 2>/dev/null || true
         
         # Extract and export KSU version info from dev branch
-        KSU_GIT_VERSION=$(git rev-list --count origin/dev 2>/dev/null)
-        KSU_GIT_TAG=$(git describe --tags --abbrev=0 origin/dev 2>/dev/null || echo "")
-        KSU_COMMIT=$(git rev-parse --short origin/dev 2>/dev/null)
+        KSU_GIT_VERSION=$(git rev-list --count refs/remotes/origin/dev 2>/dev/null)
+        KSU_GIT_TAG=$(git describe --tags --abbrev=0 refs/remotes/origin/dev 2>/dev/null || echo "")
+        KSU_COMMIT=$(git rev-parse --short refs/remotes/origin/dev 2>/dev/null)
         KSU_VERSION=$((30000 + KSU_GIT_VERSION))
         
         echo "KSU_GIT_TAG=$KSU_GIT_TAG" >> $GITHUB_ENV
