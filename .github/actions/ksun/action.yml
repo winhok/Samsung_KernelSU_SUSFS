@@ -65,7 +65,7 @@ runs:
       run: |
         cd "$COMMON/KernelSU-Next"
         # Fetch dev branch for version info (tags, commits, etc.)
-        git fetch --depth=50 origin dev 2>/dev/null || true
+        git fetch origin dev 2>/dev/null || true
         
         # Extract and export KSU version info from dev branch
         KSU_GIT_VERSION=$(git rev-list --count origin/dev 2>/dev/null)
