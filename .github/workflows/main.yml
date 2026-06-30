@@ -242,13 +242,13 @@ jobs:
           if [ "${{ inputs.optimization }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
           -> Kernel Optimization - Memory, I/O, CPU scheduler, network and other general tunings
+          -> Patches for optimizations can be found here - https://github.com/WildKernels/kernel_patches/tree/main/common
           EOF
           fi
 
           cat <<'EOF' >> release_body.md
           
           Notes:
-          - The only modifications to Samsung Kernels at this time are KSUN and SUSFS. Everything else is left at default settings.
           - Currently no support for KernelPatch-Next/KPM for the time being.
           
           Module: 
