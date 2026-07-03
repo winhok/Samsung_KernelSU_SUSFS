@@ -29,7 +29,7 @@ runs:
 
      if [[ ${{ inputs.susfs }} == 'true' ]]; then
       SUSFS_BRANCH="gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}-dev"
-      git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
+      git clone https://gitlab.com/pershoot/susfs4ksu.git -b "$SUSFS_BRANCH"
      
       #cd susfs4ksu
       #if [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android12-5.10" ]]; then
