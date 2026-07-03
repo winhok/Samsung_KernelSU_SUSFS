@@ -28,8 +28,11 @@ runs:
      fi
 
      if [[ ${{ inputs.susfs }} == 'true' ]]; then
-      SUSFS_BRANCH="gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}-dev"
-      git clone https://gitlab.com/pershoot/susfs4ksu.git -b "$SUSFS_BRANCH"
+      SUSFS_BRANCH="gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}"
+      git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
+      cd susfs4ksu
+      git fetch https://gitlab.com/pershoot/susfs4ksu.git gki-android14-6.1-dev
+      git log ..FETCH_HEAD --oneline | awk '{print $1}' | tac | xargs git cherry-pick
      
       #cd susfs4ksu
       #if [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android12-5.10" ]]; then
