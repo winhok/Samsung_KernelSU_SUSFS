@@ -21,6 +21,9 @@ runs:
     shell: bash
     run: |
      ANYKERNEL_BRANCH="gki-2.0"
+     git config --global user.name "github-actions[bot]"
+     git config --global user.email "41898282+github-actions[bot]@://github.com"
+     
      git clone https://github.com/WildKernels/kernel_patches.git
      git clone https://github.com/WildKernels/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
      if [[ ${{ inputs.zeromount }} == 'true' ]]; then
