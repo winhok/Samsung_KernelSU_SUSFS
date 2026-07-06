@@ -1,0 +1,25 @@
+name: add bbrv1
+description: enable configs to add bbrv3 to kernel
+
+runs:
+ using: composite
+ steps:
+     
+  - name: add bbrv1 configs to defconfig
+    shell: bash
+    run: |
+     cat >> "$GKI_DEFCONFIG" << 'EOF'
+     # Add bbrv1
+     CONFIG_NET_SCH_FQ=y
+     CONFIG_NET_SCH_FQ_CODEL=y
+     CONFIG_NET_SCH_CAKE=y
+     CONFIG_NET_SCH_PIE=y
+     CONFIG_NET_SCH_FQ_PIE=y
+     CONFIG_TCP_CONG_ADVANCED=y
+     CONFIG_TCP_CONG_BBR=y
+     CONFIG_TCP_CONG_CUBIC=y
+     
+     # CONFIG_TCP_CONG_BIC is not set
+     # CONFIG_TCP_CONG_WESTWOOD is not set
+     # CONFIG_TCP_CONG_HTCP is not set
+     EOF
