@@ -39,7 +39,10 @@ on:
       ntsync:
         required: true
         type: string
-      bbr:
+      bbrv1:
+        required: true
+        type: string
+      bbrv3:
         required: true
         type: string
       cache:
@@ -248,9 +251,13 @@ jobs:
           android_version: ${{ inputs.android_version }}
           kernel_version: ${{ inputs.kernel_version }}
 
+      - name: Add bbrv1
+        if: inputs.bbrv1 == 'true'
+        uses: ./.github/actions/bbrv1
+        
       - name: Add bbrv3
-        if: inputs.bbr == 'true'
-        uses: ./.github/actions/bbr
+        if: inputs.bbrv3 == 'true'
+        uses: ./.github/actions/bbrv3
         with:
           android_version: ${{ inputs.android_version }}
           kernel_version: ${{ inputs.kernel_version }}
