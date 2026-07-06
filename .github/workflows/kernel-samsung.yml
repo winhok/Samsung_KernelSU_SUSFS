@@ -28,7 +28,10 @@ on:
       ntsync:
         required: true
         type: string
-      bbr:
+      bbrv1:
+        required: true
+        type: string
+      bbrv3:
         required: true
         type: string
       cache:
@@ -255,7 +258,8 @@ jobs:
       ksun: ${{ inputs.ksun }}
       droidspace: ${{ inputs.droidspace }}
       ntsync: ${{ inputs.ntsync }}
-      bbr: ${{ inputs.bbr }}
+      bbrv1: ${{ inputs.bbrv1 }}
+      bbrv3: ${{ inputs.bbrv3 }}
       cache: ${{ inputs.cache }}
       ipv6_nat: ${{ inputs.ipv6_nat }}
       optimization: ${{ inputs.optimization }}
