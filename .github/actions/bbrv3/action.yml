@@ -1,5 +1,5 @@
-name: add bbrv3
-description: enable configs to add bbrv3 to kernel
+name: add bbrv3 AND bbrv1
+description: enable configs to add bbrv3 and v1 to kernel
 inputs:
  kernel_version:
   description: 'version of kernel'
