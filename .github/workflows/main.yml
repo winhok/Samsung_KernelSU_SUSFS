@@ -59,7 +59,13 @@ on:
         type: boolean
         default: true
 
-      bbr:
+      bbrv1:
+        description: "bbrv1"
+        required: false
+        type: boolean
+        default: true
+        
+      bbrv3:
         description: "bbrv3"
         required: false
         type: boolean
@@ -102,7 +108,8 @@ jobs:
       ksun: ${{ inputs.ksun }}
       droidspace: ${{ inputs.droidspace }}
       ntsync: ${{ inputs.ntsync }}
-      bbr: ${{ inputs.bbr }}
+      bbrv1: ${{ inputs.bbrv1 }}
+      bbrv3: ${{ inputs.bbrv3 }}
       cache: ${{ inputs.cache }}
       ipv6_nat: ${{ inputs.ipv6_nat }}
       optimization: ${{ inputs.optimization }}
