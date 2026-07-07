@@ -304,8 +304,18 @@ jobs:
         uses: ./.github/actions/file-name
         with:
          branch: ${{ inputs.branch }}
-         android_version: ${{ inputs.android_version }}
-         kernel_version: ${{ inputs.kernel_version }}
+         ksun: ${{ inputs.ksun }}
+         susfs: ${{ inputs.susfs }}
+         zeromount: ${{ inputs.zeromount }}
+         bbg: ${{ inputs.bbg }}
+         bbrv1: ${{ inputs.bbrv1 }}
+         bbrv3: ${{ inputs.bbrv3 }}
+         droidspaces: ${{ inputs.droidspace }}
+         ntsync: ${{ inputs.ntsync }}
+         ipv6_nat: ${{ inputs.ipv6_nat }}
+         ttl: ${{ inputs.ttl }}
+         unicodefix: ${{ inputs.unicodefix }}
+         
 
 #      - name: ensure bazel cache is set to be used
 #        if: inputs.build_type == 'Bazel' && inputs.cache == 'true'
