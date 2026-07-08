@@ -23,9 +23,7 @@ runs:
      ROOT="$GITHUB_WORKSPACE"
      if [[ ${{ inputs.susfs }} == 'true' ]]; then
       SUSFS4KSU="$ROOT/susfs4ksu"
-      KERNEL_PATCHES="$ROOT/kernel_patches"
       echo "SUSFS4KSU=$SUSFS4KSU" >> $GITHUB_ENV
-      echo "KERNEL_PATCHES=$KERNEL_PATCHES" >> $GITHUB_ENV
      fi
      ANYKERNEL3="$ROOT/AnyKernel3"
      if [[ ${{ inputs.zeromount }} == 'true' ]]; then
@@ -37,8 +35,10 @@ runs:
       echo "NOMOUNT=$NOMOUNT" >> $GITHUB_ENV
      fi
 
+     KERNEL_PATCHES="$ROOT/kernel_patches"
      echo "ROOT=$ROOT" >> $GITHUB_ENV
      echo "ANYKERNEL3=$ANYKERNEL3" >> $GITHUB_ENV
+     echo "KERNEL_PATCHES=$KERNEL_PATCHES" >> $GITHUB_ENV
      
   - name: set common variable
     shell: bash
