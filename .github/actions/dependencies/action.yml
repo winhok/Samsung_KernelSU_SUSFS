@@ -10,6 +10,9 @@ inputs:
  zeromount:
     description: 'zeromount'
     required: true
+ nomount:
+    description: 'NoMount'
+    required: true
  susfs:
     description: 'SUSFS'
     required: true
@@ -48,4 +51,8 @@ runs:
         #COMMIT=676d202ed2cc322a2f90bcb2b56bc4f6a864acb8
       #fi
       #git checkout "$COMMIT"
+     fi
+
+     if [[ ${{ inputs.nomount }} == 'true' ]]; then
+      git clone https://github.com/maxsteeel/nomount.git -b master
      fi
