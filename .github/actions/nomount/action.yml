@@ -1,0 +1,28 @@
+name: add nomount
+description: add and configure nomount
+inputs:
+  kernel_version:
+   description: 'Kernel version (6.1)'
+   required: true
+
+runs:
+  using: composite
+  steps:
+   - name: apply nomount patch
+     shell: bash
+     run: |
+      cd "$COMMON"
+      patch -p1 "$NOMOUNT/kernel/patches/nomount_${{ inputs.kernel_version }}_kernel_integration.patch"
+
+   - name: copy required files
+     shell: bash
+     run: |
+      cd "$COMMON/fs"
+      cp "$NOMOUNT/kernel/src/*" ./
+
+   - name: add to defconfig
+     shell: bash
+     run: |
+      cat >> "$GKI_DEFCONFIG" << 'EOF'
+      CONFIG_NOMOUNT=y
+      EOF
