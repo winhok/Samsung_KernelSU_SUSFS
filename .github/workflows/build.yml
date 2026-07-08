@@ -30,6 +30,9 @@ on:
       zeromount:
         required: true
         type: string
+      nomount:
+        required: true
+        type: string
       ksun:
         required: true
         type: string
@@ -226,6 +229,12 @@ jobs:
         uses: ./.github/actions/zeromount
         with:
           android_version: ${{ inputs.android_version }}
+          kernel_version: ${{ inputs.kernel_version }}
+
+      - name: add nomount
+        if: inputs.nomount == 'true'
+        uses: ./.github/actions/nomount
+        with:
           kernel_version: ${{ inputs.kernel_version }}
 
       - name: Add BBG
