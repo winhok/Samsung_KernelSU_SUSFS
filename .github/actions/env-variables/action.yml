@@ -10,6 +10,9 @@ inputs:
  zeromount:
   description: 'zeromount'
   required: true
+ nomount:
+  description: 'nomount'
+  required: true
 
 runs:
  using: composite
@@ -28,6 +31,10 @@ runs:
      if [[ ${{ inputs.zeromount }} == 'true' ]]; then
       ZEROMOUNT="$ROOT/Super-Builders"
       echo "ZEROMOUNT=$ZEROMOUNT" >> $GITHUB_ENV
+     fi
+     if [[ ${{ inputs.nomount }} == 'true' ]]; then
+      NOMOUNT="$ROOT/nomount"
+      echo "NOMOUNT=$NOMOUNT" >> $GITHUB_ENV
      fi
 
      echo "ROOT=$ROOT" >> $GITHUB_ENV
