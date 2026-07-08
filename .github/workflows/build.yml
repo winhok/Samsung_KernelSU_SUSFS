@@ -184,6 +184,7 @@ jobs:
         uses: ./.github/actions/dependencies
         with:
           zeromount: ${{ inputs.zeromount }}
+          nomount: ${{ inputs.nomount }}
           susfs: ${{ inputs.susfs }}
           android_version: ${{ inputs.android_version }}
           kernel_version: ${{ inputs.kernel_version }}
@@ -199,6 +200,7 @@ jobs:
          branch: ${{ inputs.branch }}
          susfs: ${{ inputs.susfs }}
          zeromount: ${{ inputs.zeromount }}
+         nomount: ${{ inputs.nomount }}
           
       - name: Extract all tar.xz files and delete them
         run: |
