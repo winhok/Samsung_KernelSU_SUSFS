@@ -19,6 +19,9 @@ on:
       zeromount:
         required: true
         type: string
+      nomount:
+        required: true
+        type: string
       ksun:
         required: true
         type: string
@@ -106,26 +109,26 @@ jobs:
             android_version: "android14"
             kernel_version: "6.1"
             build_type: "Bazel"
-#          - branch: "SM-S926B-Oneui8.5"
-#            android_version: "android14"
-#            kernel_version: "6.1"
-#            build_type: "Bazel"
-#          - branch: "SM-S926B-Oneui8"
-#            android_version: "android14"
-#            kernel_version: "6.1"
-#            build_type: "Bazel"
-#          - branch: "SM-S926B-Oneui7-bit7"
-#            android_version: "android14"
-#            kernel_version: "6.1"
-#            build_type: "Bazel"
-#          - branch: "SM-S926B-Oneui7-bit8"
-#            android_version: "android14"
-#            kernel_version: "6.1"
-#            build_type: "Bazel"
-#          - branch: "SM-S926B-Oneui7-bit9"
-#            android_version: "android14"
-#            kernel_version: "6.1"
-#            build_type: "Bazel"
+          - branch: "SM-S926B-Oneui8.5"
+            android_version: "android14"
+            kernel_version: "6.1"
+            build_type: "Bazel"
+          - branch: "SM-S926B-Oneui8"
+            android_version: "android14"
+            kernel_version: "6.1"
+            build_type: "Bazel"
+          - branch: "SM-S926B-Oneui7-bit7"
+            android_version: "android14"
+            kernel_version: "6.1"
+            build_type: "Bazel"
+          - branch: "SM-S926B-Oneui7-bit8"
+            android_version: "android14"
+            kernel_version: "6.1"
+            build_type: "Bazel"
+          - branch: "SM-S926B-Oneui7-bit9"
+            android_version: "android14"
+            kernel_version: "6.1"
+            build_type: "Bazel"
           - branch: "SM-X926B-Oneui6.1"
             android_version: "android14"
             kernel_version: "6.1"
@@ -255,6 +258,7 @@ jobs:
       bbg: ${{ inputs.bbg }}
       unicodefix: ${{ inputs.unicodefix }}
       zeromount: ${{ inputs.zeromount }}
+      nomount: ${{ inputs.nomount }}
       ksun: ${{ inputs.ksun }}
       droidspace: ${{ inputs.droidspace }}
       ntsync: ${{ inputs.ntsync }}
