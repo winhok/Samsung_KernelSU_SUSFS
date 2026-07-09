@@ -20,7 +20,7 @@ runs:
      run: |
       cd "$COMMON/fs"
       curl -LO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.c"
-      curl -LO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.c"
+      curl -LO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.h"
 
    - name: add to defconfig
      shell: bash
