@@ -12,14 +12,15 @@ runs:
      shell: bash
      run: |
       cd "$COMMON"
-      patch -p1 "$NOMOUNT/kernel/patches/nomount_${{ inputs.kernel_version }}_kernel_integration.patch"
+      #patch -p1 "$NOMOUNT/kernel/patches/nomount_${{ inputs.kernel_version }}_kernel_integration.patch"
+      curl -L -s "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/patches/nomount_${{ inputs.kernel_version }}_kernel_integration.patch" | patch -p1
 
    - name: copy required files
      shell: bash
      run: |
       cd "$COMMON/fs"
-      cp "$NOMOUNT/kernel/src/nomount.c" ./
-      cp "$NOMOUNT/kernel/src/nomount.h" ./
+      curl -LJO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.c"
+      curl -LJO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.c"
 
    - name: add to defconfig
      shell: bash
