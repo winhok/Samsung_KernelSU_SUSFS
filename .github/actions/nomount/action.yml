@@ -18,7 +18,8 @@ runs:
      shell: bash
      run: |
       cd "$COMMON/fs"
-      cp "$NOMOUNT/kernel/src/"* ./
+      cp "$NOMOUNT/kernel/src/nomount.c" ./
+      cp "$NOMOUNT/kernel/src/nomount.h" ./
 
    - name: add to defconfig
      shell: bash
