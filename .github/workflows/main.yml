@@ -171,13 +171,15 @@ jobs:
           path: ./downloaded-artifacts
           pattern: '*-AnyKernel3'
 
-      - name: get ksun and susfs commit hashes
+      - name: get commit hashes
         run: |
          echo "SUSFS_510=(git ls-remote https://gitlab.com/simonpunk/susfs4ksu.git refs/heads/gki-android12-5.10 | cut -f1)" >> $GITHUB_ENV
          echo "SUSFS_515=(git ls-remote https://gitlab.com/simonpunk/susfs4ksu.git refs/heads/gki-android13-5.15 | cut -f1)" >> $GITHUB_ENV
          echo "SUSFS_61=(git ls-remote https://gitlab.com/simonpunk/susfs4ksu.git refs/heads/gki-android14-6.1 | cut -f1)" >> $GITHUB_ENV
          echo "SUSFS_66=(git ls-remote https://gitlab.com/simonpunk/susfs4ksu.git refs/heads/gki-android15-6.6 | cut -f1)" >> $GITHUB_ENV
          echo "KSUN_HASH=(git ls-remote https://github.com/pershoot/KernelSU-Next.git refs/heads/dev | cut -f1)" >> $GITHUB_ENV
+         echo "BBG_HASH=(git ls-remote https://github.com/vc-teahouse/Baseband-guard.git refs/heads/main | cut -f1)" >> $GITHUB_ENV
+         echo "NM_HASH=(git ls-remote https://github.com/maxsteeel/nomount.git refs/heads/master | cut -f1)" >> $GITHUB_ENV
 
       - name: Set release body
         run: |
@@ -222,6 +224,12 @@ jobs:
           EOF
           fi
 
+          if [ "${{ inputs.nomount }}" = "true" ]; then
+          cat <<'EOF' >> release_body.md
+          -> NoMount - https://github.com/maxsteeel/nomount
+          EOF
+          fi
+
           if [ "${{ inputs.droidspace }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
           -> droidspaces support - https://github.com/ravindu644/Droidspaces-OSS
@@ -234,7 +242,7 @@ jobs:
           EOF
           fi
 
-          if [ "${{ inputs.bbr }}" = "true" ]; then
+          if [ "${{ inputs.bbrv3 }}" = "true" ]; then
           cat <<'EOF' >> release_body.md
           -> TCP BBRV3 (better TCP congestion and faster internet)
           -> CAKE and PIE qdisc Support - Better Net Schedulers
@@ -270,14 +278,37 @@ jobs:
           -> https://github.com/rrr333nnn333/BRENE
 
           Commit Hashes:
+          EOF
+          if ${{ inputs.ksun }} == 'true' ]]; then
+          cat <<'EOF' >> release_body.md
           KSUN: ${{ env.KSUN_HASH }}
           
+          EOF
+          fi
+          if ${{ inputs.susfs }} == 'true' ]]; then
+          cat <<'EOF' >> release_body.md
           SUSFS: 
           android12-5.10: ${{ env.SUSFS_510 }}
           android13-5.15: ${{ env.SUSFS_515 }}
           android14-6.1: ${{ env.SUSFS_61 }}
           android15-6.6: ${{ env.SUSFS_66 }}
+          
           EOF
+          fi
+          
+          if ${{ inputs.bbg }} == 'true' ]]; then
+          cat <<'EOF' >> release_body.md
+          BBG: ${{ env.BBG_HASH }}
+
+          EOF
+          fi
+          
+          if ${{ inputs.nomount }} == 'true' ]]; then
+          cat <<'EOF' >> release_body.md
+          NoMount: ${{ env.NM_HASH }}
+
+          EOF
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
