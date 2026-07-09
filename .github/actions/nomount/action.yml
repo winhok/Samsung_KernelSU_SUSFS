@@ -19,8 +19,8 @@ runs:
      shell: bash
      run: |
       cd "$COMMON/fs"
-      curl -LJO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.c"
-      curl -LJO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.c"
+      curl -LO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.c"
+      curl -LO "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/master/kernel/src/nomount.c"
 
    - name: add to defconfig
      shell: bash
