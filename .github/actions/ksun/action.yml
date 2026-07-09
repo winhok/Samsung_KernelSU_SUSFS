@@ -14,7 +14,7 @@ runs:
       shell: bash
       run: |
         cd "$COMMON"
-        curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/dev-susfs/kernel/setup.sh" | bash -s dev
+        curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s dev
 
         cd "$GITHUB_WORKSPACE"
         cat >> "$GKI_DEFCONFIG" << 'EOF'
@@ -58,6 +58,7 @@ runs:
         echo "KSU_COMMIT=$KSU_COMMIT" >> $GITHUB_ENV
 
     - name: 'Fix KernelSU-Next'
+      if: inputs.susfs == 'true'
       shell: bash
       run: |
         set -euo pipefail
