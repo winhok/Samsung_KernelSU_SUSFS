@@ -48,6 +48,7 @@ runs:
    - name: prepare namespace and open.c for susfs patch because scamsung
      shell: bash
      run: |
+      cd "$COMMON"
       #Prepare open.c for susfs patching
       sed -i '/#ifdef CONFIG_SECURITY_DEFEX/,/^#endif/d' fs/open.c
 
@@ -63,6 +64,7 @@ runs:
    - name: apply susfs patch and fix if necessary
      shell: bash
      run: |
+      cd "$COMMON"
       # Apply SUSFS core patch
       patch -p1 < 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch || true
       rm -rf 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch
