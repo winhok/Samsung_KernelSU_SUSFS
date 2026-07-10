@@ -54,5 +54,5 @@ runs:
      fi
 
      if [[ ${{ inputs.nomount }} == 'true' ]]; then
-      git clone https://github.com/maxsteeel/nomount.git -b master
+      git clone https://github.com/maxsteeel/nomount.git -b dev
      fi
