@@ -10,6 +10,9 @@ inputs:
   branch:
    description: 'device kernel'
    required: true
+  nomount:
+   description: 'nomount'
+   required: true
 
 runs:
   using: composite
@@ -33,7 +36,7 @@ runs:
        #    rm -f "$p"
        #done
        
-   - name: Apply to Kernel
+   - name: Copy required files
      shell: bash
      run: |
       # Apply SUSFS to kernel
@@ -42,6 +45,9 @@ runs:
       cp "$SUSFS4KSU/kernel_patches/include/linux/"* ./include/linux/
       cp "$SUSFS4KSU/kernel_patches/50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch" ./          
 
+   - name: prepare namespace and open.c for susfs patch because scamsung
+     shell: bash
+     run: |
       #Prepare open.c for susfs patching
       sed -i '/#ifdef CONFIG_SECURITY_DEFEX/,/^#endif/d' fs/open.c
 
@@ -54,6 +60,9 @@ runs:
         }
        }' fs/namespace.c
           
+   - name: apply susfs patch and fix if necessary
+     shell: bash
+     run: |
       # Apply SUSFS core patch
       patch -p1 < 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch || true
       rm -rf 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch
@@ -74,9 +83,19 @@ runs:
       else
         echo "No patch file found, skipping"
       fi
-          
-      cd "$GITHUB_WORKSPACE"
+
+   - name: add ksu-susfs to config
+     shell: bash
+     run: |
       cat >> "$GKI_DEFCONFIG" << 'EOF'
       # SUSFS Configuration
       CONFIG_KSU_SUSFS=y
+      EOF
+
+   - name: if using nomount, disable sus_mount
+     if: inputs.nomount == 'true'
+     shell: bash
+     run: |
+      cat >> "$GKI_DEFCONFIG" << 'EOF'
+      CONFIG_KSU_SUSFS_SUS_MOUNT=n
       EOF
