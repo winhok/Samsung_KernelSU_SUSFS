@@ -93,11 +93,3 @@ runs:
       # SUSFS Configuration
       CONFIG_KSU_SUSFS=y
       EOF
-
-   - name: if using nomount, disable sus_mount
-     if: inputs.nomount == 'true'
-     shell: bash
-     run: |
-      cat >> "$GKI_DEFCONFIG" << 'EOF'
-      CONFIG_KSU_SUSFS_SUS_MOUNT=n
-      EOF
