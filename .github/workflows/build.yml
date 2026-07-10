@@ -225,6 +225,7 @@ jobs:
           android_version: ${{ inputs.android_version }}
           kernel_version: ${{ inputs.kernel_version }}
           branch: ${{ inputs.branch }}
+          nomount: ${{ inputs.nomount }}
 
       - name: Apply zeromount Patches
         if: inputs.susfs == 'true' && inputs.zeromount == 'true'
