@@ -19,7 +19,7 @@ runs:
      
      patch -p1 --forward < "$KERNEL_PATCHES/common/optimized_mem_operations.patch"
      patch -p1 --forward < "$KERNEL_PATCHES/common/file_struct_8bytes_align.patch"
-     if [[ ${{ inputs.branch }} != SM-S926* ]]; then
+     if [[ ${{ inputs.branch }} != SM-S926* && ${{ inputs.branch }} != SM-A546* ]]; then
      patch -p1 --forward < "$KERNEL_PATCHES/common/reduce_cache_pressure.patch"
      patch -p1 --forward < "$KERNEL_PATCHES/common/mem_opt_prefetch.patch"
      else
@@ -46,7 +46,7 @@ runs:
 
      sed -i 's/pm_wakeup_event(dev, 2 \* MSEC_PER_SEC);/pm_wakeup_event(dev, ktime_to_ms(min) + 1);/' kernel/time/alarmtimer.c
      patch -p1 --forward < "$KERNEL_PATCHES/common/int_sqrt.patch"
-     if [[ ${{ inputs.branch }} != SM-S926* ]]; then
+     if [[ ${{ inputs.branch }} != SM-S926* && ${{ inputs.branch }} != SM-A546* ]]; then
      patch -p1 --forward < "$KERNEL_PATCHES/common/force_tcp_nodelay.patch"
      patch -p1 --forward < "$KERNEL_PATCHES/common/reduce_gc_thread_sleep_time.patch"
      else
@@ -74,11 +74,11 @@ runs:
      else
       patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/avoid_extra_s2idle_wake_attempts.patch"
      fi
-     if [[ ${{ inputs.branch }} != SM-S926* ]]; then
+     if [[ ${{ inputs.branch }} != SM-S926* && ${{ inputs.branch }} != SM-A546* ]]; then
      echo "Patching disable_cache_hot_buddy.patch"
      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/disable_cache_hot_buddy.patch"
      else
-     echo "skipping disable_cache_hot_buddy for s24 plus"
+     echo "skipping disable_cache_hot_buddy"
      fi
      echo "Patching f2fs_enlarge_min_fsync_blocks.patch"
      patch -p1 -F3 --forward < "$KERNEL_PATCHES/common/f2fs_enlarge_min_fsync_blocks.patch"
