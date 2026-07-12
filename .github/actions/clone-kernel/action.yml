@@ -15,6 +15,9 @@ runs:
       set -euo pipefail
       test "${{ inputs.branch }}" = "SM-S918B-Oneui7"
       source_commit="cbaa6b3d5a28e8a023aa4504c1726329bd6d867a"
+      source_firmware="S918BXXS8DYG1"
+      echo "Samsung source firmware: $source_firmware"
+      echo "SAMSUNG_SOURCE_FIRMWARE=$source_firmware" >> "$GITHUB_ENV"
       git init "$CONFIG"
       git -C "$CONFIG" remote add origin https://github.com/WildKernels/Samsung_Kernels.git
       git -C "$CONFIG" fetch --depth=1 origin "$source_commit"

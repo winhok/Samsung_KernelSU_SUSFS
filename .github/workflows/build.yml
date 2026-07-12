@@ -350,41 +350,42 @@ jobs:
          ccache: ${{ inputs.cache }}
          kernel_version: ${{ inputs.kernel_version }}
 
-      - name: Collect pinned S918B DYI3 raw artifacts
+      - name: Collect pinned S918B DYG1 raw artifacts
         if: inputs.branch == 'SM-S918B-Oneui7'
         run: |
           set -euo pipefail
           output="$CONFIG/kernel_platform/bazel-bin/common/kernel_aarch64"
           test -s "$output/Image"
           test -s "$output/Module.symvers"
-          mkdir -p pinned-dyi3-artifacts
-          cp "$output/Image" pinned-dyi3-artifacts/Image
-          cp "$output/Module.symvers" pinned-dyi3-artifacts/Module.symvers
+          mkdir -p pinned-dyg1-artifacts
+          cp "$output/Image" pinned-dyg1-artifacts/Image
+          cp "$output/Module.symvers" pinned-dyg1-artifacts/Module.symvers
           if [ -s "$output/include/config/kernel.release" ]; then
-            cp "$output/include/config/kernel.release" pinned-dyi3-artifacts/kernel.release
+            cp "$output/include/config/kernel.release" pinned-dyg1-artifacts/kernel.release
           fi
-          cp "$CONFIG/kernel_platform/common/arch/arm64/configs/gki_defconfig" pinned-dyi3-artifacts/gki_defconfig
+          cp "$CONFIG/kernel_platform/common/arch/arm64/configs/gki_defconfig" pinned-dyg1-artifacts/gki_defconfig
           {
+            echo "Samsung source firmware: $SAMSUNG_SOURCE_FIRMWARE"
             echo "Samsung source: $(git -C "$CONFIG" rev-parse HEAD)"
             echo "KernelSU Next: $(git -C "$COMMON/KernelSU-Next" rev-parse HEAD)"
             echo "SUSFS: $(git -C "$GITHUB_WORKSPACE/susfs4ksu" rev-parse HEAD)"
             echo "kernel_patches: $(git -C "$GITHUB_WORKSPACE/kernel_patches" rev-parse HEAD)"
             echo "AnyKernel3: $(git -C "$GITHUB_WORKSPACE/AnyKernel3" rev-parse HEAD)"
-          } > pinned-dyi3-artifacts/SOURCE_COMMITS.txt
+          } > pinned-dyg1-artifacts/SOURCE_COMMITS.txt
           grep '^KSU_NEXT_MANAGER_LIST := ' "$COMMON/KernelSU-Next/kernel/Kbuild" \
-            > pinned-dyi3-artifacts/MANAGER_TRUST.txt
-          sha256sum pinned-dyi3-artifacts/* > pinned-dyi3-artifacts/SHA256SUMS
+            > pinned-dyg1-artifacts/MANAGER_TRUST.txt
+          sha256sum pinned-dyg1-artifacts/* > pinned-dyg1-artifacts/SHA256SUMS
           if find "$CONFIG" -type f -name '*.rej' -print -quit | grep -q .; then
             echo "Patch reject detected before artifact upload" >&2
             exit 1
           fi
 
-      - name: Upload pinned S918B DYI3 raw artifacts
+      - name: Upload pinned S918B DYG1 raw artifacts
         if: inputs.branch == 'SM-S918B-Oneui7'
         uses: actions/upload-artifact@v6
         with:
-          name: S918B-DYI3-pinned-raw
-          path: pinned-dyi3-artifacts/**
+          name: S918B-DYG1-pinned-raw
+          path: pinned-dyg1-artifacts/**
           if-no-files-found: error
           compression-level: 6
 
