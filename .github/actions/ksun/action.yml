@@ -51,10 +51,13 @@ runs:
         # Fetch dev branch for version info (tags, commits, etc.)
         git fetch origin dev 2>/dev/null
         
-        # Extract and export KSU version info from dev branch
-        KSU_GIT_VERSION=$(git rev-list --count refs/remotes/origin/dev 2>/dev/null)
-        KSU_GIT_TAG=$(git describe --tags --abbrev=0 refs/remotes/origin/dev 2>/dev/null || echo "")
-        KSU_COMMIT=$(git rev-parse --short refs/remotes/origin/dev 2>/dev/null)
+        # Match KSUN's own Kbuild/Manager version rule: count the pinned
+        # commit's merge-base with the official dev branch, not the moving
+        # tip of origin/dev.
+        BASE_COMMIT=$(git merge-base HEAD refs/remotes/origin/dev)
+        KSU_GIT_VERSION=$(git rev-list --count "$BASE_COMMIT")
+        KSU_GIT_TAG=$(git describe --tags --abbrev=0 "$BASE_COMMIT" 2>/dev/null || echo "")
+        KSU_COMMIT=$(git rev-parse --short HEAD)
         KSU_VERSION=$((30000 + KSU_GIT_VERSION))
 
         cd kernel
