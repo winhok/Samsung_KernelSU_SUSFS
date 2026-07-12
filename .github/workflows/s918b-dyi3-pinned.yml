@@ -28,3 +28,4 @@ jobs:
       ipv6_nat: ${{ 'false' }}
       optimization: ${{ 'false' }}
       ttl: ${{ 'false' }}
+      manager_cert: ${{ '0x57a:72a2658862f46a9fca1a7cdba5e499e512f00aab5ea043641f62821d7060f939' }}

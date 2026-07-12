@@ -4,6 +4,10 @@ inputs:
  susfs:
   description: 'susfs'
   required: true
+ manager_cert:
+  description: 'Production Manager identity as 0x<DER length hex>:<SHA-256>'
+  required: false
+  default: ''
 
 
 runs:
@@ -38,10 +42,14 @@ runs:
         test "$(git -C KernelSU-Next rev-parse HEAD)" = "$KSUN_COMMIT"
 
         # Keep the two upstream Manager certificates and additionally trust
-        # the reproducibly built DYI3 Manager (Android debug certificate).
-        MANAGER_CERT="0x2e8:5fbe1d09ef7b52ba35166a119b76b97cc14f85bba8e63d53810fb8468294cabb"
-        sed -i "/^KSU_NEXT_MANAGER_LIST := / s/$/,$MANAGER_CERT/" KernelSU-Next/kernel/Kbuild
-        grep -Fq "$MANAGER_CERT" KernelSU-Next/kernel/Kbuild
+        # the locally generated production Manager certificate.  The private
+        # signing key never enters GitHub Actions.
+        MANAGER_CERT="${{ inputs.manager_cert }}"
+        if [ -n "$MANAGER_CERT" ]; then
+          "$GITHUB_WORKSPACE/.github/scripts/validate-manager-cert.sh" "$MANAGER_CERT"
+          sed -i "/^KSU_NEXT_MANAGER_LIST := / s/$/,$MANAGER_CERT/" KernelSU-Next/kernel/Kbuild
+          grep -Fq "$MANAGER_CERT" KernelSU-Next/kernel/Kbuild
+        fi
         
         cd "$GITHUB_WORKSPACE"
         cat >> "$GKI_DEFCONFIG" << 'EOF'

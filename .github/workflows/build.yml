@@ -59,6 +59,10 @@ on:
       ttl:
         required: true
         type: string
+      manager_cert:
+        required: false
+        type: string
+        default: ''
 
 jobs:
   build-samsung-gki:
@@ -215,6 +219,7 @@ jobs:
         uses: ./.github/actions/ksun
         with:
           susfs: ${{ inputs.susfs }}
+          manager_cert: ${{ inputs.manager_cert }}
         
       - name: Apply SUSFS Patches
         if: inputs.susfs == 'true'
