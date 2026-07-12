@@ -26,8 +26,11 @@ runs:
       if: inputs.susfs == 'true'
       shell: bash
       run: |
+        set -euo pipefail
+        KSUN_COMMIT="032b799f2a4dbd2235fc462cadacbdfd7bffef33"
         cd "$COMMON"
-        curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/dev-susfs/kernel/setup.sh" | bash -s dev-susfs
+        curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/$KSUN_COMMIT/kernel/setup.sh" | bash -s "$KSUN_COMMIT"
+        test "$(git -C KernelSU-Next rev-parse HEAD)" = "$KSUN_COMMIT"
         
         cd "$GITHUB_WORKSPACE"
         cat >> "$GKI_DEFCONFIG" << 'EOF'
@@ -41,7 +44,7 @@ runs:
         cd "$COMMON/KernelSU-Next"
 
         # Fetch dev branch for version info (tags, commits, etc.)
-        git fetch origin dev 2>/dev/null || true
+        git fetch origin dev 2>/dev/null
         
         # Extract and export KSU version info from dev branch
         KSU_GIT_VERSION=$(git rev-list --count refs/remotes/origin/dev 2>/dev/null)

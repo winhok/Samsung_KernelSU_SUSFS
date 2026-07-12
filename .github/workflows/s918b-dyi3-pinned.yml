@@ -1,0 +1,30 @@
+name: S918B DYI3 Pinned KSUN SUSFS
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      branch: SM-S918B-Oneui7
+      android_version: android13
+      kernel_version: "5.15"
+      build_type: Bazel
+      ksun: "true"
+      susfs: "true"
+      zeromount: "false"
+      nomount: "false"
+      bbg: "false"
+      unicodefix: "false"
+      droidspace: "false"
+      ntsync: "false"
+      bbrv1: "false"
+      bbrv3: "false"
+      cache: "false"
+      ipv6_nat: "false"
+      optimization: "false"
+      ttl: "false"

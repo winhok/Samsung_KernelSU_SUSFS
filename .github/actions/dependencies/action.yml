@@ -24,11 +24,16 @@ runs:
     shell: bash
     run: |
      ANYKERNEL_BRANCH="gki-2.0"
+     KERNEL_PATCHES_COMMIT="be22d05545cd24774b0f0483190e4b23c11c02a0"
+     ANYKERNEL_COMMIT="0b46673ae91aee8d60bd6ee257b4d56d3f6a0114"
+     SUSFS_COMMIT="d05021cab9a269d8f1873efa9c2601bbb51cabdb"
      git config --global user.name "github-actions[bot]"
      git config --global user.email "41898282+github-actions[bot]@://github.com"
      
      git clone https://github.com/WildKernels/kernel_patches.git
      git clone https://github.com/WildKernels/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
+     git -C kernel_patches checkout "$KERNEL_PATCHES_COMMIT"
+     git -C AnyKernel3 checkout "$ANYKERNEL_COMMIT"
      if [[ ${{ inputs.zeromount }} == 'true' ]]; then
       git clone https://github.com/jimsterino98/Super-Builders.git
      fi
@@ -36,9 +41,7 @@ runs:
      if [[ ${{ inputs.susfs }} == 'true' ]]; then
       SUSFS_BRANCH="gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}"
       git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
-      cd susfs4ksu
-      git fetch https://gitlab.com/pershoot/susfs4ksu.git gki-android14-6.1-dev
-      git log ..FETCH_HEAD --oneline -n 2 | awk '{print $1}' | tac | xargs git cherry-pick
+      git -C susfs4ksu checkout "$SUSFS_COMMIT"
      
       #cd susfs4ksu
       #if [[ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == "android12-5.10" ]]; then

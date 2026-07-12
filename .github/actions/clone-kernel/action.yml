@@ -12,4 +12,11 @@ runs:
    - name: Clone Kernel Source
      shell: bash
      run: |
-      git clone --depth 1 -b ${{ inputs.branch }} --single-branch https://github.com/WildKernels/Samsung_Kernels.git $CONFIG
+      set -euo pipefail
+      test "${{ inputs.branch }}" = "SM-S918B-Oneui7"
+      source_commit="cbaa6b3d5a28e8a023aa4504c1726329bd6d867a"
+      git init "$CONFIG"
+      git -C "$CONFIG" remote add origin https://github.com/WildKernels/Samsung_Kernels.git
+      git -C "$CONFIG" fetch --depth=1 origin "$source_commit"
+      git -C "$CONFIG" checkout --detach FETCH_HEAD
+      test "$(git -C "$CONFIG" rev-parse HEAD)" = "$source_commit"

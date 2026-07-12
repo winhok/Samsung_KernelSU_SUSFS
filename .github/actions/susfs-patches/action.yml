@@ -64,9 +64,10 @@ runs:
    - name: apply susfs patch and fix if necessary
      shell: bash
      run: |
+      set -euo pipefail
       cd "$COMMON"
       # Apply SUSFS core patch
-      patch -p1 < 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch || true
+      patch --fuzz=0 -p1 < 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch
       rm -rf 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch
 
       shopt -s nullglob
@@ -84,6 +85,12 @@ runs:
         shopt -u nullglob
       else
         echo "No patch file found, skipping"
+      fi
+
+      if find . -type f -name '*.rej' -print -quit | grep -q .; then
+       echo "Patch reject detected" >&2
+       find . -type f -name '*.rej' -print >&2
+       exit 1
       fi
 
    - name: add ksu-susfs to config
