@@ -73,7 +73,6 @@ jobs:
         uses: actions/checkout@v5
        
       - name: Free Disk Space
-        if: true
         uses: endersonmenezes/free-disk-space@v3  # Use @main for latest, @v3 for stable
         with:
           remove_android: true
@@ -316,6 +315,8 @@ jobs:
         uses: ./.github/actions/file-name
         with:
          branch: ${{ inputs.branch }}
+         android_version: ${{ inputs.android_version }}
+         kernel_version: ${{ inputs.kernel_version }}
          ksun: ${{ inputs.ksun }}
          susfs: ${{ inputs.susfs }}
          zeromount: ${{ inputs.zeromount }}
@@ -342,6 +343,7 @@ jobs:
         with:
          branch: ${{ inputs.branch }}
          build_type: ${{ inputs.build_type }}
+         ccache: ${{ inputs.cache }}
          kernel_version: ${{ inputs.kernel_version }}
 
       - name: Collect pinned S918B DYI3 raw artifacts
@@ -448,7 +450,7 @@ jobs:
           # Add build info
           echo "## Build Information" >> build_summary.md
           echo "- **Android Version**: ${{ inputs.android_version }}" >> build_summary.md
-          echo "- **Kernel Version**: ${{ inputs.kernel_version }}.${{ inputs.sub_level }}" >> build_summary.md
+          echo "- **Kernel Version**: ${{ inputs.kernel_version }}" >> build_summary.md
           echo "- **BBG**: Installed" >> build_summary.md
           echo "" >> build_summary.md
 
