@@ -29,7 +29,12 @@ runs:
         set -euo pipefail
         KSUN_COMMIT="032b799f2a4dbd2235fc462cadacbdfd7bffef33"
         cd "$COMMON"
-        curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/$KSUN_COMMIT/kernel/setup.sh" | bash -s "$KSUN_COMMIT"
+        # The setup script's clone may not contain an arbitrary pinned commit's
+        # tree when the commit is outside the remote default branch.  Establish
+        # the SUSFS branch first, then fetch and detach at the audited SHA.
+        curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/$KSUN_COMMIT/kernel/setup.sh" | bash -s dev-susfs
+        git -C KernelSU-Next fetch --no-tags origin "$KSUN_COMMIT"
+        git -C KernelSU-Next checkout --detach "$KSUN_COMMIT"
         test "$(git -C KernelSU-Next rev-parse HEAD)" = "$KSUN_COMMIT"
         
         cd "$GITHUB_WORKSPACE"
