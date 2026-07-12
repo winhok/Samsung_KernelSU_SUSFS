@@ -36,6 +36,12 @@ runs:
         git -C KernelSU-Next fetch --no-tags origin "$KSUN_COMMIT"
         git -C KernelSU-Next checkout --detach "$KSUN_COMMIT"
         test "$(git -C KernelSU-Next rev-parse HEAD)" = "$KSUN_COMMIT"
+
+        # Keep the two upstream Manager certificates and additionally trust
+        # the reproducibly built DYI3 Manager (Android debug certificate).
+        MANAGER_CERT="0x2e8:5fbe1d09ef7b52ba35166a119b76b97cc14f85bba8e63d53810fb8468294cabb"
+        sed -i "/^KSU_NEXT_MANAGER_LIST := / s/$/,$MANAGER_CERT/" KernelSU-Next/kernel/Kbuild
+        grep -Fq "$MANAGER_CERT" KernelSU-Next/kernel/Kbuild
         
         cd "$GITHUB_WORKSPACE"
         cat >> "$GKI_DEFCONFIG" << 'EOF'

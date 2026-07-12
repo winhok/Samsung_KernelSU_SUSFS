@@ -366,6 +366,8 @@ jobs:
             echo "kernel_patches: $(git -C "$GITHUB_WORKSPACE/kernel_patches" rev-parse HEAD)"
             echo "AnyKernel3: $(git -C "$GITHUB_WORKSPACE/AnyKernel3" rev-parse HEAD)"
           } > pinned-dyi3-artifacts/SOURCE_COMMITS.txt
+          grep '^KSU_NEXT_MANAGER_LIST := ' "$COMMON/KernelSU-Next/kernel/Kbuild" \
+            > pinned-dyi3-artifacts/MANAGER_TRUST.txt
           sha256sum pinned-dyi3-artifacts/* > pinned-dyi3-artifacts/SHA256SUMS
           if find "$CONFIG" -type f -name '*.rej' -print -quit | grep -q .; then
             echo "Patch reject detected before artifact upload" >&2
