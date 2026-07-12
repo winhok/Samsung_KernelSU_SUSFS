@@ -66,12 +66,34 @@ runs:
      run: |
       set -euo pipefail
       cd "$COMMON"
-      # Apply SUSFS core patch
+      # The generic SUSFS patch has three known context conflicts in Samsung's
+      # dm3q tree.  Permit only those rejects, then resolve them with the
+      # device-specific patch below.  Any additional reject is fatal.
+      set +e
       patch --fuzz=0 -p1 < 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch
+      core_status=$?
+      set -e
+      if [ "$core_status" -gt 1 ]; then
+       echo "SUSFS core patch failed with status $core_status" >&2
+       exit "$core_status"
+      fi
+
+      mapfile -t core_rejects < <(find . -type f -name '*.rej' -printf '%P\n' | sort)
+      expected_rejects=()
+      if [ "${{ inputs.branch }}" = "SM-S918B-Oneui7" ]; then
+       expected_rejects=("fs/namespace.c.rej" "fs/proc/task_mmu.c.rej")
+      fi
+      if [ "${core_rejects[*]}" != "${expected_rejects[*]}" ]; then
+       echo "Unexpected SUSFS core rejects: ${core_rejects[*]:-none}" >&2
+       exit 1
+      fi
       rm -rf 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch
 
       shopt -s nullglob
       patches=("$KERNEL_PATCHES/samsung/${{ inputs.branch }}"/*.patch)
+      if [ "${{ inputs.branch }}" = "SM-S918B-Oneui7" ]; then
+       patches+=("${{ github.action_path }}/patches/SM-S918B-Oneui7"/*.patch)
+      fi
       
       if [ ${#patches[@]} -gt 0 ]; then
        echo "Patches found, applying..."
@@ -79,7 +101,7 @@ runs:
        
        # Fix SUSFS rejects
         for p in *.patch; do
-          patch -p1 < "$p"
+          patch --fuzz=0 -p1 < "$p"
           rm -f "$p"
         done
         shopt -u nullglob
@@ -87,6 +109,7 @@ runs:
         echo "No patch file found, skipping"
       fi
 
+      rm -f "${expected_rejects[@]}"
       if find . -type f -name '*.rej' -print -quit | grep -q .; then
        echo "Patch reject detected" >&2
        find . -type f -name '*.rej' -print >&2
