@@ -1,4 +1,4 @@
-name: S918B DYG1 Pinned KSUN SUSFS
+name: S918B DYG1 ROT06 Experiment Matrix
 
 permissions:
   contents: read
@@ -7,7 +7,55 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  stock_security_ksun:
+    uses: ./.github/workflows/build.yml
+    with:
+      branch: SM-S918B-Oneui7
+      android_version: android13
+      kernel_version: "5.15"
+      build_type: Bazel
+      ksun: ${{ 'true' }}
+      susfs: ${{ 'false' }}
+      security_profile: stock-security
+      zeromount: ${{ 'false' }}
+      nomount: ${{ 'false' }}
+      bbg: ${{ 'false' }}
+      unicodefix: ${{ 'false' }}
+      droidspace: ${{ 'false' }}
+      ntsync: ${{ 'false' }}
+      bbrv1: ${{ 'false' }}
+      bbrv3: ${{ 'false' }}
+      cache: ${{ 'false' }}
+      ipv6_nat: ${{ 'false' }}
+      optimization: ${{ 'false' }}
+      ttl: ${{ 'false' }}
+      manager_cert: ${{ '0x57a:72a2658862f46a9fca1a7cdba5e499e512f00aab5ea043641f62821d7060f939' }}
+
+  minimal_security_ksun:
+    uses: ./.github/workflows/build.yml
+    with:
+      branch: SM-S918B-Oneui7
+      android_version: android13
+      kernel_version: "5.15"
+      build_type: Bazel
+      ksun: ${{ 'true' }}
+      susfs: ${{ 'false' }}
+      security_profile: rot06-minimal
+      zeromount: ${{ 'false' }}
+      nomount: ${{ 'false' }}
+      bbg: ${{ 'false' }}
+      unicodefix: ${{ 'false' }}
+      droidspace: ${{ 'false' }}
+      ntsync: ${{ 'false' }}
+      bbrv1: ${{ 'false' }}
+      bbrv3: ${{ 'false' }}
+      cache: ${{ 'false' }}
+      ipv6_nat: ${{ 'false' }}
+      optimization: ${{ 'false' }}
+      ttl: ${{ 'false' }}
+      manager_cert: ${{ '0x57a:72a2658862f46a9fca1a7cdba5e499e512f00aab5ea043641f62821d7060f939' }}
+
+  minimal_security_ksun_susfs:
     uses: ./.github/workflows/build.yml
     with:
       branch: SM-S918B-Oneui7
@@ -16,6 +64,7 @@ jobs:
       build_type: Bazel
       ksun: ${{ 'true' }}
       susfs: ${{ 'true' }}
+      security_profile: rot06-minimal
       zeromount: ${{ 'false' }}
       nomount: ${{ 'false' }}
       bbg: ${{ 'false' }}
