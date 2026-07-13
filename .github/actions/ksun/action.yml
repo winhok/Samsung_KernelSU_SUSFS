@@ -13,21 +13,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup KSUN with no susfs
-      if: inputs.susfs == 'false'
-      shell: bash
-      run: |
-        cd "$COMMON"
-        curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s dev
-
-        cd "$GITHUB_WORKSPACE"
-        cat >> "$GKI_DEFCONFIG" << 'EOF'
-        # KernelSU Configuration
-        CONFIG_KSU=y
-        EOF
-
-    - name: Setup pershoot KSUN with susfs
-      if: inputs.susfs == 'true'
+    - name: Setup pinned KernelSU-Next
       shell: bash
       run: |
         set -euo pipefail

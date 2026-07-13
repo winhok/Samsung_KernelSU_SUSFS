@@ -4,6 +4,10 @@ inputs:
  branch:
    description: 'which device kernel'
    required: true
+ profile:
+   description: 'Samsung security profile: nuke, stock-security, or rot06-minimal'
+   required: false
+   default: 'nuke'
 
 runs:
  using: composite
@@ -26,10 +30,10 @@ runs:
      CONFIG_LOG_BUF_SHIFT=20
      EOF
 
-  - name: nuke securities for root access
+  - name: apply Samsung security profile
     shell: bash
     run: |
-     # 1. Determine which defconfig file needs to be patched based on the branch
+     set -euo pipefail
      target_config=""
      
      if [[ ${{ inputs.branch }} == SM-S938B* || "${{ inputs.branch }}" == "SM-S931B-Oneui8" ]]; then
@@ -42,11 +46,27 @@ runs:
          target_config="$GKI_DEFCONFIG"
      fi
      
-     # 2. Apply the nuke modifications exactly once if a target file was assigned
-     if [ -n "$target_config" ]; then
-      echo "Nuking Samsung Knox/Root protection in: $target_config"
-         
-     cat >> "$target_config" << 'EOF'
+     if [ -z "$target_config" ]; then
+      echo "No Samsung security profile changes required for this target."
+      exit 0
+     fi
+
+     case "${{ inputs.profile }}" in
+      stock-security)
+       echo "Keeping stock Samsung security configuration in: $target_config"
+       ;;
+      rot06-minimal)
+       echo "Keeping UH/RKP/KDP while disabling only DEFEX/PROCA/FIVE in: $target_config"
+       cat >> "$target_config" << 'EOF'
+     # ROT06 experiment: retain UH/RKP/KDP trust path
+     CONFIG_SECURITY_DEFEX=n
+     CONFIG_PROCA=n
+     CONFIG_FIVE=n
+     EOF
+       ;;
+      nuke)
+       echo "Nuking Samsung Knox/Root protection in: $target_config"
+       cat >> "$target_config" << 'EOF'
      # nuke root protection
      CONFIG_UH=n
      CONFIG_UH_RKP=n
@@ -61,7 +81,12 @@ runs:
      CONFIG_KDP_NS=n
      CONFIG_KDP=n
      EOF
-     fi
+       ;;
+      *)
+       echo "Unsupported Samsung security profile: ${{ inputs.profile }}" >&2
+       exit 1
+       ;;
+     esac
 
   - name: remove check_defconfig
     shell: bash

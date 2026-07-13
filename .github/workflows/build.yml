@@ -63,6 +63,10 @@ on:
         required: false
         type: string
         default: ''
+      security_profile:
+        required: false
+        type: string
+        default: 'nuke'
 
 jobs:
   build-samsung-gki:
@@ -307,6 +311,22 @@ jobs:
         uses: ./.github/actions/configs
         with:
          branch: ${{ inputs.branch }}
+         profile: ${{ inputs.security_profile }}
+
+      - name: Verify ROT06 security profile
+        if: inputs.security_profile == 'stock-security' || inputs.security_profile == 'rot06-minimal'
+        run: |
+          set -euo pipefail
+          if grep -Eq '^CONFIG_(UH|RKP|KDP)(_[A-Z0-9_]+)?=n$' "$GKI_DEFCONFIG"; then
+            echo "ROT06 profile unexpectedly disables UH, RKP, or KDP:" >&2
+            grep -E '^CONFIG_(UH|RKP|KDP)(_[A-Z0-9_]+)?=n$' "$GKI_DEFCONFIG" >&2
+            exit 1
+          fi
+          if [ "${{ inputs.security_profile }}" = "rot06-minimal" ]; then
+            grep -Fxq 'CONFIG_SECURITY_DEFEX=n' "$GKI_DEFCONFIG"
+            grep -Fxq 'CONFIG_PROCA=n' "$GKI_DEFCONFIG"
+            grep -Fxq 'CONFIG_FIVE=n' "$GKI_DEFCONFIG"
+          fi
          
       - name: Change Kernel Name and clean dirty
         uses: ./.github/actions/kernel-name
@@ -332,6 +352,7 @@ jobs:
          ipv6_nat: ${{ inputs.ipv6_nat }}
          ttl: ${{ inputs.ttl }}
          unicodefix: ${{ inputs.unicodefix }}
+         security_profile: ${{ inputs.security_profile }}
          
 
 #      - name: ensure bazel cache is set to be used
@@ -368,9 +389,14 @@ jobs:
             echo "Samsung source firmware: $SAMSUNG_SOURCE_FIRMWARE"
             echo "Samsung source: $(git -C "$CONFIG" rev-parse HEAD)"
             echo "KernelSU Next: $(git -C "$COMMON/KernelSU-Next" rev-parse HEAD)"
-            echo "SUSFS: $(git -C "$GITHUB_WORKSPACE/susfs4ksu" rev-parse HEAD)"
+            if [ -d "$GITHUB_WORKSPACE/susfs4ksu/.git" ]; then
+              echo "SUSFS: $(git -C "$GITHUB_WORKSPACE/susfs4ksu" rev-parse HEAD)"
+            else
+              echo "SUSFS: disabled"
+            fi
             echo "kernel_patches: $(git -C "$GITHUB_WORKSPACE/kernel_patches" rev-parse HEAD)"
             echo "AnyKernel3: $(git -C "$GITHUB_WORKSPACE/AnyKernel3" rev-parse HEAD)"
+            echo "Samsung security profile: ${{ inputs.security_profile }}"
           } > pinned-dyg1-artifacts/SOURCE_COMMITS.txt
           grep '^KSU_NEXT_MANAGER_LIST := ' "$COMMON/KernelSU-Next/kernel/Kbuild" \
             > pinned-dyg1-artifacts/MANAGER_TRUST.txt

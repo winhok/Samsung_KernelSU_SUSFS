@@ -43,6 +43,10 @@ inputs:
  unicodefix:
   description: 'unicode fix'
   required: true
+ security_profile:
+  description: 'Samsung security profile'
+  required: false
+  default: 'nuke'
 
 runs:
  using: composite
@@ -65,6 +69,8 @@ runs:
      [[ "${{ inputs.ipv6_nat }}" == "true" ]] && FILE_NAME="${FILE_NAME}-IPv6_IP-set"
      [[ "${{ inputs.ttl }}" == "true" ]] && FILE_NAME="${FILE_NAME}-TTL"
      [[ "${{ inputs.unicodefix }}" == "true" ]] && FILE_NAME="${FILE_NAME}-UF"
+     [[ "${{ inputs.security_profile }}" == "stock-security" ]] && FILE_NAME="${FILE_NAME}-ROT06-STOCKSEC"
+     [[ "${{ inputs.security_profile }}" == "rot06-minimal" ]] && FILE_NAME="${FILE_NAME}-ROT06-MINSEC"
      
       
      echo "ARTIFACT_BASE=$ARTIFACT_BASE" >> $GITHUB_ENV
