@@ -398,8 +398,12 @@ jobs:
             echo "AnyKernel3: $(git -C "$GITHUB_WORKSPACE/AnyKernel3" rev-parse HEAD)"
             echo "Samsung security profile: ${{ inputs.security_profile }}"
           } > pinned-dyg1-artifacts/SOURCE_COMMITS.txt
-          grep '^KSU_NEXT_MANAGER_LIST := ' "$COMMON/KernelSU-Next/kernel/Kbuild" \
-            > pinned-dyg1-artifacts/MANAGER_TRUST.txt
+          if grep -q '^KSU_NEXT_MANAGER_LIST := ' "$COMMON/KernelSU-Next/kernel/Kbuild"; then
+            grep '^KSU_NEXT_MANAGER_LIST := ' "$COMMON/KernelSU-Next/kernel/Kbuild"
+          else
+            grep '^KSU_NEXT_MANAGER_SIZE := ' "$COMMON/KernelSU-Next/kernel/Kbuild"
+            grep '^KSU_NEXT_MANAGER_HASH := ' "$COMMON/KernelSU-Next/kernel/Kbuild"
+          fi > pinned-dyg1-artifacts/MANAGER_TRUST.txt
           sha256sum pinned-dyg1-artifacts/* > pinned-dyg1-artifacts/SHA256SUMS
           if find "$CONFIG" -type f -name '*.rej' -print -quit | grep -q .; then
             echo "Patch reject detected before artifact upload" >&2

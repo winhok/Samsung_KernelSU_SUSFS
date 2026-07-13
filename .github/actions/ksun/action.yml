@@ -45,14 +45,23 @@ runs:
       run: |
         set -euo pipefail
         cd "$COMMON"
-        # Keep the two upstream Manager certificates and additionally trust
-        # the locally generated production Manager certificate.  The private
-        # signing key never enters GitHub Actions.
+        # The official stable tree accepts one Manager identity through
+        # SIZE/HASH, while the audited SUSFS fork accepts a comma-separated
+        # Manager list.  The private signing key never enters GitHub Actions.
         MANAGER_CERT="${{ inputs.manager_cert }}"
         if [ -n "$MANAGER_CERT" ]; then
           "$GITHUB_WORKSPACE/.github/scripts/validate-manager-cert.sh" "$MANAGER_CERT"
-          sed -i "/^KSU_NEXT_MANAGER_LIST := / s/$/,$MANAGER_CERT/" KernelSU-Next/kernel/Kbuild
-          grep -Fq "$MANAGER_CERT" KernelSU-Next/kernel/Kbuild
+          if [ "${{ inputs.susfs }}" = "false" ]; then
+            MANAGER_SIZE="${MANAGER_CERT%%:*}"
+            MANAGER_HASH="${MANAGER_CERT#*:}"
+            sed -i "s/^KSU_NEXT_MANAGER_SIZE := .*/KSU_NEXT_MANAGER_SIZE := $MANAGER_SIZE/" KernelSU-Next/kernel/Kbuild
+            sed -i "s/^KSU_NEXT_MANAGER_HASH := .*/KSU_NEXT_MANAGER_HASH := $MANAGER_HASH/" KernelSU-Next/kernel/Kbuild
+            grep -Fxq "KSU_NEXT_MANAGER_SIZE := $MANAGER_SIZE" KernelSU-Next/kernel/Kbuild
+            grep -Fxq "KSU_NEXT_MANAGER_HASH := $MANAGER_HASH" KernelSU-Next/kernel/Kbuild
+          else
+            sed -i "/^KSU_NEXT_MANAGER_LIST := / s/$/,$MANAGER_CERT/" KernelSU-Next/kernel/Kbuild
+            grep -Fq "$MANAGER_CERT" KernelSU-Next/kernel/Kbuild
+          fi
         fi
         
         cd "$GITHUB_WORKSPACE"
