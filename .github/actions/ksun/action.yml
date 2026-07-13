@@ -13,7 +13,20 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup pinned KernelSU-Next
+    - name: Setup pinned official KernelSU-Next without SUSFS
+      if: inputs.susfs == 'false'
+      shell: bash
+      run: |
+        set -euo pipefail
+        KSUN_COMMIT="3b18216f71df189ab3d1b1ce0bdb21be1268e771"
+        cd "$COMMON"
+        curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/$KSUN_COMMIT/kernel/setup.sh" | bash -s stable
+        git -C KernelSU-Next fetch --no-tags origin "$KSUN_COMMIT"
+        git -C KernelSU-Next checkout --detach "$KSUN_COMMIT"
+        test "$(git -C KernelSU-Next rev-parse HEAD)" = "$KSUN_COMMIT"
+
+    - name: Setup pinned SUSFS-compatible KernelSU-Next
+      if: inputs.susfs == 'true'
       shell: bash
       run: |
         set -euo pipefail
@@ -27,6 +40,11 @@ runs:
         git -C KernelSU-Next checkout --detach "$KSUN_COMMIT"
         test "$(git -C KernelSU-Next rev-parse HEAD)" = "$KSUN_COMMIT"
 
+    - name: Configure KernelSU-Next
+      shell: bash
+      run: |
+        set -euo pipefail
+        cd "$COMMON"
         # Keep the two upstream Manager certificates and additionally trust
         # the locally generated production Manager certificate.  The private
         # signing key never enters GitHub Actions.

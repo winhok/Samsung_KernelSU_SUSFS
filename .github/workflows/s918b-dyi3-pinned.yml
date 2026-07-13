@@ -5,6 +5,12 @@ permissions:
 
 on:
   workflow_dispatch:
+    inputs:
+      run_susfs:
+        description: Build the KSUN plus SUSFS comparison variant
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   stock_security_ksun:
@@ -56,6 +62,7 @@ jobs:
       manager_cert: ${{ '0x57a:72a2658862f46a9fca1a7cdba5e499e512f00aab5ea043641f62821d7060f939' }}
 
   minimal_security_ksun_susfs:
+    if: ${{ inputs.run_susfs }}
     uses: ./.github/workflows/build.yml
     with:
       branch: SM-S918B-Oneui7
